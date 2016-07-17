@@ -1,0 +1,25 @@
+{
+  "name": "react-native-restart",
+  "version": "0.0.1",
+  "description": "React Native Restart Component",
+  "main": "index",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-component",
+    "react-native",
+    "ios",
+    "android",
+    "restart"
+  ],
+  "bugs": {
+    "url": "https://github.com/avishayil/react-native-restart/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://git@github.com:avishayil/react-native-restart.git"
+  },
+  "author": "Avishay Bar <http://www.geektime.co.il>",
+  "license": "MIT"
+}
