@@ -9,8 +9,11 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity
 } from 'react-native';
+
+import RNRestart from 'react-native-restart';
 
 export default class Example extends Component {
   render() {
@@ -20,12 +23,13 @@ export default class Example extends Component {
           Welcome to React Native!
         </Text>
         <Text style={styles.instructions}>
-          To get started, edit index.android.js
+          To restart the app, press on this button:
         </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
+        <TouchableOpacity onPress={() => RNRestart.Restart()}>
+          <View style={styles.restartButton}>
+            <Text style={{color: '#fff'}}>Restart</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -46,8 +50,14 @@ const styles = StyleSheet.create({
   instructions: {
     textAlign: 'center',
     color: '#333333',
-    marginBottom: 5,
+    marginBottom: 20,
   },
+  restartButton: {
+    backgroundColor: '#7d7d7d',
+    paddingHorizontal: 50,
+    paddingVertical: 20,
+    borderRadius: 10
+  }
 });
 
 AppRegistry.registerComponent('Example', () => Example);
