@@ -1,18 +1,13 @@
 package com.avishayil.rnrestart;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
-
-import android.app.Activity;
-
-import com.facebook.react.ReactActivity;
+import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Created by Avishay on 7/17/16.
@@ -44,16 +39,29 @@ public class ReactNativeRestart extends ReactContextBaseJavaModule {
     }
 
     private void loadBundle() {
-        try {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
+        final Activity currentActivity = getCurrentActivity();
+        if (currentActivity == null) {
+            return;
+        }
+
+        ReactApplication reactApplication = (ReactApplication) currentActivity.getApplication();
+        final ReactInstanceManager instanceManager = reactApplication.getReactNativeHost().getReactInstanceManager();
+        if (instanceManager == null) {
+            return;
+        }
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    instanceManager.recreateReactContextInBackground();
+                } catch (Exception e) {
+                    // The recreation method threw an unknown exception
+                    // so just simply fallback to restarting the Activity (if it exists)
                     loadBundleLegacy();
                 }
-            });
-        } catch (Exception e) {
-            loadBundleLegacy();
-        }
+            }
+        });
     }
 
     @ReactMethod
