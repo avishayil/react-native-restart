@@ -7,9 +7,9 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"react": "~15.4.0-rc.4",
-		"react-native": "0.40.0",
-		"react-native-restart": "^0.0.2"
+		"react": "~16.0.0-beta.5",
+		"react-native": "^0.49.3",
+		"react-native-restart": "^0.0.4"
 	},
 	"devDependencies": {
 		"babel-jest": "18.0.0",
