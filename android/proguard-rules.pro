@@ -1,6 +1,6 @@
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
-# in /usr/local/Cellar/android-sdk/24.4.1_1/tools/proguard/proguard-android.txt
+# in /usr/local/Cellar/android-sdk/24.3.3/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the proguardFiles
 # directive in build.gradle.
 #
@@ -15,3 +15,15 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# Invoked via reflection, when forcing javascript restarts.
+-keepclassmembers class com.facebook.react.ReactInstanceManagerImpl {
+    void recreateReactContextInBackground();
+}
+
+-keepclassmembers class com.facebook.react.XReactInstanceManagerImpl {
+    void recreateReactContextInBackground();
+}
+
+# Can't find referenced class org.bouncycastle.**
+-dontwarn com.nimbusds.jose.**

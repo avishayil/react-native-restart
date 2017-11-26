@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -15,7 +15,14 @@ import {
 
 import RNRestart from 'react-native-restart';
 
-export default class Example extends Component {
+const instructions = Platform.select({
+  ios: 'Press Cmd+R to reload,\n' +
+    'Cmd+D or shake for dev menu',
+  android: 'Double tap R on your keyboard to reload,\n' +
+    'Shake or press menu button for dev menu',
+});
+
+export default class App extends Component<{}> {
   render() {
     return (
       <View style={styles.container}>
@@ -31,6 +38,7 @@ export default class Example extends Component {
           </View>
         </TouchableOpacity>
       </View>
+
     );
   }
 }
@@ -50,14 +58,13 @@ const styles = StyleSheet.create({
   instructions: {
     textAlign: 'center',
     color: '#333333',
-    marginBottom: 20,
+    marginBottom: 5,
   },
   restartButton: {
     backgroundColor: '#7d7d7d',
     paddingHorizontal: 50,
     paddingVertical: 20,
+    marginTop: 10,
     borderRadius: 10
   }
 });
-
-AppRegistry.registerComponent('Example', () => Example);
