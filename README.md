@@ -17,6 +17,7 @@ Restart Your React Native Project
 		- [RN >= 0.29](#rn-029)
 	- [Manual iOS Installation](#manual-ios-installation)
 		- [Importing The Library](#importing-the-library)
+	- [CocoaPod iOS Installation](#cocoapod-ios-installation)
 	- [Usage](#usage)
 	- [CREDITS](#credits)
 	- [TODO](#todo)
@@ -139,6 +140,31 @@ public class MainApplication extends Application implements ReactApplication {
  * Ensure that `Header Search Paths` on `Build Settings` has the path `$(SRCROOT)/../node_modules/react-native-restart` set to `recursive`:
 
  * You're All Set!
+
+## CocoaPod iOS Installation
+
+In your `ios/Podfile` make sure to use `RCTRestart` from the local
+`node_modules/`. With that, only your project Pod needs to be linked and
+no extra configuration is required:
+
+```ruby
+target 'MyReactApp' do
+  # Make sure you're also using React-Native from ../node_modules
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+    'Core',
+    'RCTActionSheet',
+	# ... whatever else you use
+  ]
+  # React-Native dependencies such as yoga:
+  pod 'yoga', path: '../node_modules/react-native/ReactCommon/yoga'
+
+  # The following line uses RCTRestart, linking with
+  # the library and setting the Header Search Paths for you
+  pod 'RCTRestart', :path => '../node_modules/react-native-restart/ios'
+end
+```
+
+Remember to run `cd ios && pod install` to update files used by Xcode.
 
 
 ## Usage
