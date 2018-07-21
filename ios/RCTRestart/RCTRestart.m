@@ -17,9 +17,13 @@ RCT_EXPORT_MODULE(RNRestart)
 }
 
 RCT_EXPORT_METHOD(Restart) {
-    dispatch_sync(dispatch_get_main_queue(), ^{
+    if ([NSThread isMainThread]) {
         [self loadBundle];
-    });
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self loadBundle];
+        });
+    }
     return;
 }
 
