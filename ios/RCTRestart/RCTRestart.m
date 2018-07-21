@@ -17,7 +17,9 @@ RCT_EXPORT_MODULE(RNRestart)
 }
 
 RCT_EXPORT_METHOD(Restart) {
-    [self loadBundle];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [self loadBundle];
+    });
     return;
 }
 
