@@ -61,7 +61,7 @@ namespace React.Native.Restart.ReactNativeRestart
         }
 
         [ReactMethod]
-        public void restart() 
+        public void Restart() 
         {
             LoadBundle();
         }
