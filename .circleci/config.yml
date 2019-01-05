@@ -41,6 +41,7 @@ jobs:
       - run:
           name: Build react native
           command: |
+            cd Example/android
             ./gradlew assembleDebug
 
   ios:
