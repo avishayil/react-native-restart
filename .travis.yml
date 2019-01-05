@@ -8,7 +8,7 @@ install:
 android:
   components:
   - build-tools-23.0.1
-  - build-tools-26.0.1
+  - build-tools-26.0.3
   - android-26
   - android-23
   - extra-android-m2repository
