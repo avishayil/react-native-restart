@@ -1,9 +1,5 @@
 version: 2
 jobs:
-  build:
-    branches:
-      only:
-        - circle
   node:
     working_directory: ~/Example
     docker:
