@@ -9,7 +9,7 @@
   "dependencies": {
     "react": "16.4.1",
     "react-native": "0.56.0",
-    "react-native-restart": "^0.0.8"
+    "react-native-restart": "^0.0.9"
   },
   "devDependencies": {
     "babel-jest": "23.4.2",
