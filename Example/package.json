@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "react": "16.4.1",
-    "react-native": "0.56.0",
-    "react-native-restart": "^0.0.9"
+    "react-native": "0.59.3",
+    "react-native-restart": "^0.0.10"
   },
   "devDependencies": {
     "babel-jest": "23.4.2",
