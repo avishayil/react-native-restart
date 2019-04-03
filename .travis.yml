@@ -10,6 +10,8 @@ android:
   components:
   - build-tools-23.0.1
   - build-tools-26.0.3
+  - build-tools-28.0.3
+  - android-28
   - android-26
   - android-23
   - extra-android-m2repository
