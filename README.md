@@ -6,6 +6,10 @@ Restart Your React Native Project
 [![npm downloads](https://img.shields.io/npm/dm/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
 [![Build Status](https://travis-ci.org/avishayil/react-native-restart.svg?branch=master)](https://travis-ci.org/avishayil/react-native-restart)
 
+## Contributers wanted
+
+My email is on GitHub, anyone interested in helping keeping this library useful, don't hesitate to contact me!
+
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [React Native Restart](#react-native-restart)
