@@ -63,7 +63,7 @@ In `android/app/build.gradle`
 dependencies {
     ...
 
-    compile project(':react-native-restart')
+    implementation project(':react-native-restart')
 }
 ```
 
