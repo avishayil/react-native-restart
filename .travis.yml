@@ -11,15 +11,6 @@ env:
 git:
   depth: 1
 
-dist: xenial
-addons:
-  apt:
-    sources:
-      - sourceline: deb https://dl.yarnpkg.com/debian/ stable main
-        key_url: https://dl.yarnpkg.com/debian/pubkey.gpg
-    packages:
-      - oracle-java8-installer
-
 before_install:
   - touch $HOME/.android/repositories.cfg
   - yes | sdkmanager "platforms;android-28"
