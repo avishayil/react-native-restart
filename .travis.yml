@@ -15,8 +15,6 @@ git:
 
 before_install:
   - touch $HOME/.android/repositories.cfg
-  - yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platforms;android-28"
-  - yes | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;28.0.3"
   - nvm install 8
   - node --version
 install:
@@ -43,6 +41,7 @@ cache:
   - $HOME/.gradle/wrapper/
   - $HOME/.android/build-cache
 before_script:
-  - chmod +x gradlew
+  - yes | sdkmanager "platforms;android-28"
+  - yes | sdkmanager "build-tools;28.0.3"
 script:
   - cd android && ./gradlew assembleRelease
