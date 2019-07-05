@@ -19,7 +19,6 @@ addons:
         key_url: https://dl.yarnpkg.com/debian/pubkey.gpg
     packages:
       - oracle-java8-installer
-      - oracle-java8-set-default
 
 before_install:
   - touch $HOME/.android/repositories.cfg
