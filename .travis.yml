@@ -1,7 +1,8 @@
 os: linux
-dist: trusty
+dist: xenial
 sudo: required
 jdk: oraclejdk8
+language: android
 
 env:
   global:
@@ -14,8 +15,8 @@ git:
 
 before_install:
   - touch $HOME/.android/repositories.cfg
-  - yes | sdkmanager "platforms;android-28"
-  - yes | sdkmanager "build-tools;28.0.3"
+  - yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platforms;android-28"
+  - yes | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;28.0.3"
   - nvm install 8
   - node --version
 install:
