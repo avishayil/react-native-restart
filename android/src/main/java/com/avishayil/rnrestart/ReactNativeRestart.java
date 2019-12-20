@@ -1,19 +1,26 @@
 package com.avishayil.rnrestart;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.app.AlarmManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.content.Intent;
+import android.content.Context;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReactContext;
 
 /**
  * Created by Avishay on 7/17/16.
  */
 public class ReactNativeRestart extends ReactContextBaseJavaModule {
+
+    private ReactContext mContext;
 
     private static final String REACT_APPLICATION_CLASS_NAME = "com.facebook.react.ReactApplication";
     private static final String REACT_NATIVE_HOST_CLASS_NAME = "com.facebook.react.ReactNativeHost";
@@ -22,6 +29,7 @@ public class ReactNativeRestart extends ReactContextBaseJavaModule {
 
     public ReactNativeRestart(ReactApplicationContext reactContext) {
         super(reactContext);
+        mContext = reactContext;
     }
 
     private void loadBundleLegacy() {
@@ -43,22 +51,12 @@ public class ReactNativeRestart extends ReactContextBaseJavaModule {
     private void loadBundle() {
         clearLifecycleEventListener();
         try {
-            final ReactInstanceManager instanceManager = resolveInstanceManager();
-            if (instanceManager == null) {
-                return;
-            }
-
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        instanceManager.recreateReactContextInBackground();
-                    } catch (Exception e) {
-                        loadBundleLegacy();
-                    }
-                }
-            });
-
+            Intent mStartActivity = mContext.getPackageManager().getLaunchIntentForPackage(mContext.getPackageName());
+            int mPendingIntentId = 123456;
+            PendingIntent mPendingIntent = PendingIntent.getActivity(mContext, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+            System.exit(0);
         } catch (Exception e) {
             loadBundleLegacy();
         }
