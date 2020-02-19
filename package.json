@@ -1,6 +1,6 @@
 {
   "name": "react-native-restart",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "React Native Restart Component",
   "main": "index",
   "scripts": {
