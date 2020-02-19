@@ -165,7 +165,7 @@ target 'MyReactApp' do
 
   # The following line uses RCTRestart, linking with
   # the library and setting the Header Search Paths for you
-  pod 'RCTRestart', :path => '../node_modules/react-native-restart/ios'
+  pod 'RCTRestart', :path => '../node_modules/react-native-restart'
 end
 ```
 
