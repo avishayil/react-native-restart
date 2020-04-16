@@ -42,7 +42,7 @@ $ yarn add react-native-restart
 $ npm install --save react-native-restart
 ```
 
-### Auto-linking Setup (react-native >= 0.60)
+## Auto-Linking Setup (react-native >= 0.60)
 
 ### iOS
 
@@ -59,7 +59,7 @@ No further steps should be taken
 
 `npm install react-native-restart@0.0.1 --save`
 
-## Automatic Installation
+## Automatic Installation (Without Auto-Linking)
 
 `react-native link react-native-restart` or `npm install -g rnpm && rnpm link react-native-restart`
 
