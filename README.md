@@ -31,17 +31,35 @@ My email is on GitHub, anyone interested in helping keeping this library useful,
 
 ## Installing The Library
 
-Using React Native version below 0.40? use version 0.0.1. Otherwise, use version 0.0.2.
+### With `yarn`
+
+```bash
+$ yarn add react-native-restart
+```
+
+### With `npm`
+```bash
+$ npm install --save react-native-restart
+```
+
+## Auto-Linking Setup (react-native >= 0.60)
+
+### iOS
+
+```bash
+$ cd ios
+$ pod install
+```
+
+### Android
+
+No further steps should be taken
 
 ### RN < 0.40
 
 `npm install react-native-restart@0.0.1 --save`
 
-### RN >= 0.40
-
-`npm install react-native-restart --save`
-
-## Automatic Installation
+## Automatic Installation (Without Auto-Linking)
 
 `react-native link react-native-restart` or `npm install -g rnpm && rnpm link react-native-restart`
 
