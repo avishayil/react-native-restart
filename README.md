@@ -6,29 +6,6 @@ Restart Your React Native Project
 [![npm downloads](https://img.shields.io/npm/dm/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
 [![Build Status](https://travis-ci.org/avishayil/react-native-restart.svg?branch=master)](https://travis-ci.org/avishayil/react-native-restart)
 
-## Contributers wanted
-
-My email is on GitHub, anyone interested in helping keeping this library useful, don't hesitate to contact me!
-
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-- [React Native Restart](#react-native-restart)
-	- [Installing The Library](#installing-the-library)
-		- [RN < 0.40](#rn-040)
-		- [RN >= 0.40](#rn-040)
-	- [Automatic Installation](#automatic-installation)
-	- [Manual Android Installation](#manual-android-installation)
-		- [RN < 0.29](#rn-029)
-		- [RN >= 0.29](#rn-029)
-	- [Manual iOS Installation](#manual-ios-installation)
-		- [Importing The Library](#importing-the-library)
-	- [CocoaPod iOS Installation](#cocoapod-ios-installation)
-	- [Usage](#usage)
-	- [CREDITS](#credits)
-	- [TODO](#todo)
-
-<!-- /TOC -->
-
 ## Installing The Library
 
 ### With `yarn`
@@ -54,10 +31,6 @@ $ pod install
 ### Android
 
 No further steps should be taken
-
-### RN < 0.40
-
-`npm install react-native-restart@0.0.1 --save`
 
 ## Automatic Installation (Without Auto-Linking)
 
@@ -85,39 +58,10 @@ dependencies {
 }
 ```
 
-### RN < 0.29
-
-Register module (in `MainActivity.java`)
-
-```java
-import com.avishayil.rnrestart.ReactNativeRestartPackage;  // <--- Import
-
-public class MainActivity extends ReactActivity {
-  ......
-
-      /**
-     * A list of packages used by the app. If the app uses additional views
-     * or modules besides the default ones, add more packages here.
-     */
-    @Override
-    protected List<ReactPackage> getPackages() {
-        ...
-        return Arrays.<ReactPackage>asList(
-                new MainReactPackage(),
-                new ReactNativeRestartPackage() // Add this line
-        );
-    }
-  ......
-
-}
-```
-
-### RN >= 0.29
-
 Register module (in `MainApplication.java`)
 
 ```java
-import com.avishayil.rnrestart.ReactNativeRestartPackage;  // <--- Import
+import com.reactnativerestart.RestartPackage;  // <--- Import
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -133,15 +77,11 @@ public class MainApplication extends Application implements ReactApplication {
 	        ...
 	        return Arrays.<ReactPackage>asList(
 	                new MainReactPackage(),
-	                new ReactNativeRestartPackage() // Add this line
+	                new RestartPackage() // Add this line
 	        );
 	    }
 	};
 	......
-	@Override
-	public ReactNativeHost getReactNativeHost() {
-    	return mReactNativeHost;
-	}
 };
 
 ```
@@ -150,13 +90,13 @@ public class MainApplication extends Application implements ReactApplication {
 
 ### Importing The Library
 
- * Drag the file `RCTRestart.xcodeproj` from `/node_modules/react-native-restart/ios` into the `Libraries` group in the Project navigator. Ensure that `Copy items if needed` is UNCHECKED!
+ * Drag the file `Restart.xcodeproj` from `/node_modules/react-native-restart/ios` into the `Libraries` group in the Project navigator. Ensure that `Copy items if needed` is UNCHECKED!
 
   ![Add Files To...](http://i.imgur.com/puxHiIg.png)
 
   ![Library Imported Successfully](http://i.imgur.com/toZUWg5.png)
 
- * Ensure that `libRCTRestart.a` is linked through `Link Binary With Libraries` on `Build Phases`:
+ * Ensure that `libRestart.a` is linked through `Link Binary With Libraries` on `Build Phases`:
 
   ![Library Linked](http://i.imgur.com/Sm1birt.png)
 
@@ -166,7 +106,7 @@ public class MainApplication extends Application implements ReactApplication {
 
 ## CocoaPod iOS Installation
 
-In your `ios/Podfile` make sure to use `RCTRestart` from the local
+In your `ios/Podfile` make sure to use `react-native-restart` from the local
 `node_modules/`. With that, only your project Pod needs to be linked and
 no extra configuration is required:
 
@@ -181,14 +121,13 @@ target 'MyReactApp' do
   # React-Native dependencies such as yoga:
   pod 'yoga', path: '../node_modules/react-native/ReactCommon/yoga'
 
-  # The following line uses RCTRestart, linking with
+  # The following line uses react-native-restart, linking with
   # the library and setting the Header Search Paths for you
-  pod 'RCTRestart', :path => '../node_modules/react-native-restart'
+  pod 'react-native-restart', :path => '../node_modules/react-native-restart'
 end
 ```
 
 Remember to run `cd ios && pod install` to update files used by Xcode.
-
 
 ## Usage
 
@@ -199,8 +138,10 @@ import RNRestart from 'react-native-restart'; // Import package from node module
 RNRestart.Restart();
 ```
 
-## CREDITS
-Thanks to Microsoft CodePush library. I simply extracted the code from their library's logic to reload the React Native Bundle.
+## Contributing
 
-## TODO
- * [ ] Tell me?
+Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) if you like to contribute to this library.
+
+## Credits
+
+Thanks to Microsoft CodePush library. I simply extracted the code from their library's logic to reload the React Native Bundle.
