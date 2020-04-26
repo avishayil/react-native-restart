@@ -90,7 +90,7 @@ dependencies {
 Register module (in `MainActivity.java`)
 
 ```java
-import com.avishayil.rnrestart.ReactNativeRestartPackage;  // <--- Import
+import com.reactnativerestart.RestartPackage;  // <--- Import
 
 public class MainActivity extends ReactActivity {
   ......
@@ -104,7 +104,7 @@ public class MainActivity extends ReactActivity {
         ...
         return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
-                new ReactNativeRestartPackage() // Add this line
+                new RestartPackage() // Add this line
         );
     }
   ......
@@ -117,7 +117,7 @@ public class MainActivity extends ReactActivity {
 Register module (in `MainApplication.java`)
 
 ```java
-import com.avishayil.rnrestart.ReactNativeRestartPackage;  // <--- Import
+import com.reactnativerestart.RestartPackage;  // <--- Import
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -133,7 +133,7 @@ public class MainApplication extends Application implements ReactApplication {
 	        ...
 	        return Arrays.<ReactPackage>asList(
 	                new MainReactPackage(),
-	                new ReactNativeRestartPackage() // Add this line
+	                new RestartPackage() // Add this line
 	        );
 	    }
 	};
