@@ -1,6 +1,6 @@
 {
   "name": "react-native-restart",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Sometimes you want to reload your app bundle during app runtime. This package will allow you to do it.",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -18,10 +18,11 @@
     "typescript": "tsc --noEmit",
     "lint": "eslint --ext .js,.ts,.tsx .",
     "prepare": "bob build",
-    "release": "release-it",
+    "release": "dotenv release-it",
     "example": "yarn --cwd example",
     "pods": "cd example/ios && node -e \"process.exit(require('os').platform() === 'darwin')\" || pod install",
-    "bootstrap": "yarn example && yarn && yarn pods"
+    "bootstrap": "yarn example && yarn && yarn pods && cp .env.example .env",
+    "clean": "rm -rf node_modules coverage .env lib Example/node_modules Example/ios/Pods"
   },
   "keywords": [
     "react-native",
@@ -44,6 +45,7 @@
     "@types/react": "^16.9.19",
     "@types/react-native": "0.61.10",
     "commitlint": "^8.3.4",
+    "dotenv-cli": "^3.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
@@ -89,7 +91,10 @@
       ]
     }
   },
-  "eslintIgnore": ["node_modules/", "lib/"],
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ],
   "prettier": {
     "singleQuote": true,
     "tabWidth": 2,
@@ -116,6 +121,10 @@
   "@react-native-community/bob": {
     "source": "src",
     "output": "lib",
-    "targets": ["commonjs", "module", "typescript"]
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
   }
 }
