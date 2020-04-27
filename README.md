@@ -6,6 +6,8 @@ Restart Your React Native Project
 [![npm downloads](https://img.shields.io/npm/dm/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
 [![Build Status](https://travis-ci.org/avishayil/react-native-restart.svg?branch=master)](https://travis-ci.org/avishayil/react-native-restart)
 
+![GIF of react-native-restart](./gif/ios.gif)
+
 ## Installing The Library
 
 ### With `yarn`
