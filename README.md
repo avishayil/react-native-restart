@@ -1,14 +1,16 @@
 # React Native Restart
 
-Restart Your React Native Project
-
 [![npm version](https://img.shields.io/npm/v/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
 [![Build Status](https://travis-ci.org/avishayil/react-native-restart.svg?branch=master)](https://travis-ci.org/avishayil/react-native-restart)
 
-![GIF of react-native-restart](./gif/ios.gif)
+Sometimes you want to reload your app bundle during app runtime. This package will allow you to do it.
 
-## Installing The Library
+iOS GIF             | Android GIF
+:-------------------------:|:-------------------------:
+<img src="./gif/ios.gif" title="iOS GIF" width="250"> | <img src="./gif/android.gif" title="Android GIF" width="250">
+
+## Installation
 
 ### With `yarn`
 
