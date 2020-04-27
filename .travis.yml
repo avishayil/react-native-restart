@@ -24,4 +24,4 @@ install:
 script:
   - yarn lint
   - yarn test
-  - cd /Example/android && ./gradlew assembleRelease
+  - cd Example/android && ./gradlew assembleRelease
