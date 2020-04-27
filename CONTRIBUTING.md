@@ -2,7 +2,7 @@
 
 ## Development Process
 
-I am an individual wokring on this project, all the work is public and presented on GitHub.
+I am an individual working on this project, all the work is public and presented on GitHub.
 
 ### Development workflow
 
