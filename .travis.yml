@@ -19,7 +19,7 @@ before_install:
   - sudo apt-get install -y -qq --no-install-recommends yarn
 
 install:
-  - yarn bootstrap
+  - yarn example && yarn
 
 script:
   - yarn lint
