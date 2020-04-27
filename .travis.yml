@@ -19,11 +19,9 @@ before_install:
   - sudo apt-get install -y -qq --no-install-recommends yarn
 
 install:
-  - cd Example
-  - yarn
-  - cd ..
+  - yarn bootstrap
 
 script:
-  - yarn run lint
-  - yarn run test
-  - cd Example && cd android && ./gradlew assembleRelease
+  - yarn lint
+  - yarn test
+  - ./Example/android/gradlew assembleRelease
