@@ -58,3 +58,6 @@ lib/
 
 # Dot Env
 .env
+
+# Coverage
+coverage/

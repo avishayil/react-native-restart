@@ -19,8 +19,9 @@ before_install:
   - sudo apt-get install -y -qq --no-install-recommends yarn
 
 install:
-  - cd Example
-  - yarn
+  - cd Example && yarn && cd .. && yarn
 
 script:
-  - cd android && ./gradlew assembleRelease
+  - yarn lint
+  - yarn test
+  - cd Example/android && ./gradlew assembleRelease
