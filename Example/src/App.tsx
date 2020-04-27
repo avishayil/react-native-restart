@@ -1,10 +1,26 @@
-import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
 import RNRestart from 'react-native-restart';
 
 export default function App() {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <Text style={styles.title}>Step One</Text>
       <Text style={styles.description}>
         To restart the app, press on this button:
@@ -14,7 +30,7 @@ export default function App() {
           <Text>Restart</Text>
         </View>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 }
 
