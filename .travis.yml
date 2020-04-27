@@ -23,4 +23,6 @@ install:
   - yarn
 
 script:
+  - yarn run lint
+  - yarn run test
   - cd android && ./gradlew assembleRelease

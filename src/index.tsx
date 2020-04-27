@@ -1,9 +1,9 @@
 import { NativeModules } from 'react-native';
 
+const { RNRestart } = NativeModules;
+
 type RestartType = {
   Restart(): void;
 };
-
-const { RNRestart } = NativeModules;
 
 export default RNRestart as RestartType;

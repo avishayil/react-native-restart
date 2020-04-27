@@ -14,7 +14,7 @@
     "react-native-restart.podspec"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage && jest-coverage-badges --output './badges'",
     "typescript": "tsc --noEmit",
     "lint": "eslint --ext .js,.ts,.tsx .",
     "prepare": "bob build",
@@ -51,6 +51,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.0.1",
     "jest": "^25.1.0",
+    "jest-coverage-badges": "^1.1.2",
     "prettier": "^1.19.1",
     "react": "~16.9.0",
     "react-native": "~0.61.5",
@@ -63,9 +64,26 @@
   },
   "jest": {
     "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "testMatch": [
+      "**/**/*.test.?(j|t)s?(x)"
+    ],
     "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
+      "<rootDir>/Example/",
       "<rootDir>/lib/"
+    ],
+    "coverageReporters": [
+      "json-summary",
+      "text",
+      "lcov"
     ]
   },
   "husky": {
@@ -91,10 +109,6 @@
       ]
     }
   },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/"
-  ],
   "prettier": {
     "singleQuote": true,
     "tabWidth": 2,
@@ -125,6 +139,9 @@
       "commonjs",
       "module",
       "typescript"
+    ],
+    "files": [
+      "src/"
     ]
   }
 }
