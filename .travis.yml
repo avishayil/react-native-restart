@@ -21,8 +21,9 @@ before_install:
 install:
   - cd Example
   - yarn
+  - cd ..
 
 script:
   - yarn run lint
   - yarn run test
-  - cd android && ./gradlew assembleRelease
+  - cd Example && cd android && ./gradlew assembleRelease
