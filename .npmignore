@@ -1,5 +1,3 @@
-__tests__
-_mocks_
-build
-.settings
-.project
+__tests__/
+_mocks_/
+.commitling.config.js
