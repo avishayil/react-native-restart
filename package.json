@@ -1,6 +1,6 @@
 {
   "name": "react-native-restart",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Sometimes you want to reload your app bundle during app runtime. This package will allow you to do it.",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
