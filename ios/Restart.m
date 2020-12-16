@@ -2,13 +2,11 @@
 
 @implementation Restart
 
-@synthesize bridge = _bridge;
-
 RCT_EXPORT_MODULE(RNRestart)
 
 - (void)loadBundle
 {
-    [_bridge reload];
+    RCTTriggerReloadCommandListeners();
 }
 
 RCT_EXPORT_METHOD(Restart) {
