@@ -19,8 +19,8 @@
     "lint": "eslint --ext .js,.ts,.tsx .",
     "prepare": "bob build",
     "release": "dotenv release-it",
-    "example": "yarn --cwd example",
-    "pods": "cd example/ios && node -e \"process.exit(require('os').platform() === 'darwin')\" || pod install",
+    "example": "yarn --cwd Example",
+    "pods": "cd Example/ios && node -e \"process.exit(require('os').platform() === 'darwin')\" || pod install",
     "bootstrap": "yarn example && yarn && yarn pods && cp .env.example .env",
     "clean": "rm -rf node_modules coverage .env lib Example/node_modules Example/ios/Pods"
   },
