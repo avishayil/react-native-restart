@@ -11,7 +11,8 @@
     "lib",
     "android",
     "ios",
-    "react-native-restart.podspec"
+    "react-native-restart.podspec",
+    "windows"
   ],
   "scripts": {
     "test": "jest --coverage && jest-coverage-badges --output './badges'",
