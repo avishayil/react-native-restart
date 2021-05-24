@@ -11,8 +11,8 @@ using namespace winrt::Windows::ApplicationModel::Core;
 namespace winrt::ReactNativeRestart
 {
 
-  REACT_MODULE(ReactNativeModule, L"ReactNativeRestart")
-    struct ReactNativeModule
+  REACT_MODULE(RNRestart, L"RNRestart")
+    struct RNRestart
   {
 
     //REACT_INIT(Initialize)
@@ -53,8 +53,8 @@ namespace winrt::ReactNativeRestart
       };
     }
 
-  //private:
-  //  ReactContext m_reactContext{ nullptr };
+    //private:
+    //  ReactContext m_reactContext{ nullptr };
   };
 
 } // namespace winrt::ReactNativeRestart
