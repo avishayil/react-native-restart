@@ -22,7 +22,8 @@
     "example": "yarn --cwd Example",
     "pods": "cd Example/ios && node -e \"process.exit(require('os').platform() === 'darwin')\" || pod install",
     "bootstrap": "yarn example && yarn && yarn pods && cp .env.example .env",
-    "clean": "rm -rf node_modules coverage .env lib Example/node_modules Example/ios/Pods"
+    "clean": "rm -rf node_modules coverage .env lib Example/node_modules Example/ios/Pods",
+    "windows": "react-native run-windows"
   },
   "keywords": [
     "react-native",
@@ -53,8 +54,9 @@
     "jest": "^25.1.0",
     "jest-coverage-badges": "^1.1.2",
     "prettier": "^1.19.1",
-    "react": "~16.9.0",
-    "react-native": "^0.62",
+    "react": "17.0.1",
+    "react-native": "0.64.0",
+    "react-native-windows": "^0.64.9",
     "release-it": "^12.6.3",
     "typescript": "^3.7.5"
   },
