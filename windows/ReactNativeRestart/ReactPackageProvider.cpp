@@ -4,7 +4,7 @@
 #include "ReactPackageProvider.g.cpp"
 #endif
 
-#include "ReactNativeModule.h"
+#include "RNRestart.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
