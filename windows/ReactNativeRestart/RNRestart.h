@@ -15,12 +15,6 @@ namespace winrt::ReactNativeRestart
     struct RNRestart
   {
 
-    //REACT_INIT(Initialize)
-    //  void Initialize(ReactContext const& reactContext) noexcept
-    //{
-    //  m_reactContext = reactContext;
-    //}
-
     REACT_METHOD(Restart)
       void Restart(ReactPromise<void> promise) noexcept
     {
@@ -53,8 +47,6 @@ namespace winrt::ReactNativeRestart
       };
     }
 
-    //private:
-    //  ReactContext m_reactContext{ nullptr };
   };
 
 } // namespace winrt::ReactNativeRestart
