@@ -10,6 +10,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import com.blankj.utilcode.util.AppUtils;
+
 public class RestartModule extends ReactContextBaseJavaModule {
 
     private static final String REACT_APPLICATION_CLASS_NAME = "com.facebook.react.ReactApplication";
@@ -101,6 +103,11 @@ public class RestartModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "RNRestart";
+    }
+
+    @ReactMethod
+    public void relaunchApp(final boolean isKillProcess) {
+        AppUtils.relaunchApp(isKillProcess);
     }
 
 }

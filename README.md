@@ -143,6 +143,9 @@ import RNRestart from 'react-native-restart'; // Import package from node module
 
 // Immediately reload the React Native Bundle
 RNRestart.Restart();
+
+// Or, relaunch the whole APP (Only Android)
+RNRestart.relaunchApp(true); // true means kill the old APP process
 ```
 
 ## Contributing
