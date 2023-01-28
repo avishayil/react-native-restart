@@ -115,4 +115,5 @@ repositories {
 
 dependencies {
   api 'com.facebook.react:react-native:+'
+  implementation 'com.jakewharton:process-phoenix:2.1.2'
 }
