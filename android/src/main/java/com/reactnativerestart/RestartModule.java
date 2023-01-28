@@ -9,6 +9,7 @@ import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 
 public class RestartModule extends ReactContextBaseJavaModule {
 
@@ -95,12 +96,11 @@ public class RestartModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void Restart() {
-        loadBundle();
+      ProcessPhoenix.triggerRebirth(getReactApplicationContext());
     }
 
     @Override
     public String getName() {
         return "RNRestart";
     }
-
 }
