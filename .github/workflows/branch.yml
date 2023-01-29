@@ -34,7 +34,6 @@ jobs:
         uses: actions/cache@v3
         id: cache-app-node-modules
         with:
-          working-directory: ./Example
           path: ./Example/node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install node modules if cache not present
@@ -89,8 +88,7 @@ jobs:
       - name: Restore application node modules from cache
         uses: actions/cache@v3
         with:
-          working-directory: ./Example
-          path: node_modules
+          path: ./Example/node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Build example application
         run: |
