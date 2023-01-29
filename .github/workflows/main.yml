@@ -1,10 +1,9 @@
-name: Feature branch checks
+name: Main tests
 
 on:
   push:
     branches:
       - '**'
-      - '!master'
 
 jobs:
   setup:
