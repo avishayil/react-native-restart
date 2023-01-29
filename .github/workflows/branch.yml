@@ -1,21 +1,14 @@
 name: Feature branch checks
-#
-# Branch (Ignoring) [main]
-# - Build app assets
-# |-- Lint project
-# |-- Check i18n string
-# |-- Run Tests
-#
 
 on:
   push:
     branches:
       - '**'
-      - '!main'
+      - '!master'
 
 jobs:
   setup:
-    name: Setup code and environment needed for linting, translations and tests
+    name: Setup code and environment needed for building, linting and tests
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -23,15 +16,33 @@ jobs:
         uses: actions/checkout@v3
       - name: Set up Node environment
         uses: actions/setup-node@v2
-      - name: Cache node modules
+      - name: Cache Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+          distribution: "adopt"
+          cache: "cache-java-gradle"
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: Cache module node modules
         uses: actions/cache@v3
         id: cache-node-modules
         with:
           path: node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Cache Example application node modules
+        uses: actions/cache@v3
+        id: cache-app-node-modules
+        with:
+          working-directory: ./Example
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install node modules if cache not present
         run: yarn install --immutable
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        if: steps.cache-module-node-modules.outputs.cache-hit != 'true'
+      - name: Install application node modules if cache not present
+        run: yarn install --immutable
+        if: steps.cache-example-application-node-modules.outputs.cache-hit != 'true'
 
   lint:
     runs-on: ubuntu-latest
@@ -60,5 +71,21 @@ jobs:
         with:
           path: node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
-      - name: Run tests with JUnit as reporter
+      - name: Run tests
         run: yarn test
+
+  build-android:
+    runs-on: ubuntu-latest
+    needs: setup
+    timeout-minutes: 5
+    steps:
+      - name: Restore node modules from cache
+        uses: actions/cache@v3
+        with:
+          working-directory: ./Example
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Build example application
+        run: |
+          cd ./android
+          ./gradlew assembleDebug
