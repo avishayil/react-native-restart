@@ -40,7 +40,7 @@ jobs:
         run: yarn install --immutable
         if: steps.cache-module-node-modules.outputs.cache-hit != 'true'
       - name: Install application node modules if cache not present
-        run: yarn install --immutable
+        run: cd ./Example && yarn install --immutable
         if: steps.cache-example-application-node-modules.outputs.cache-hit != 'true'
 
   lint:
