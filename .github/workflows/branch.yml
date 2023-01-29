@@ -14,31 +14,38 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
+      
       - name: Set up Node environment
         uses: actions/setup-node@v2
+      
       - name: Cache Java
         uses: actions/setup-java@v2
         with:
           java-version: "11"
           distribution: "adopt"
           cache: "gradle"
+      
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
+      
       - name: Cache module node modules
         uses: actions/cache@v3
         id: cache-node-modules
         with:
           path: node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
+      
       - name: Cache Example application node modules
         uses: actions/cache@v3
         id: cache-app-node-modules
         with:
           path: ./Example/node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
+      
       - name: Install node modules if cache not present
         run: yarn install --immutable
         if: steps.cache-module-node-modules.outputs.cache-hit != 'true'
+      
       - name: Install application node modules if cache not present
         run: cd ./Example && yarn install --immutable
         if: steps.cache-example-application-node-modules.outputs.cache-hit != 'true'
@@ -50,11 +57,13 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
+
       - name: Restore node modules from cache
         uses: actions/cache@v3
         with:
           path: node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
+
       - name: Lint
         run: yarn lint
 
@@ -65,11 +74,13 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
+
       - name: Restore node modules from cache
         uses: actions/cache@v3
         with:
           path: node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
+
       - name: Run tests
         run: yarn test
 
@@ -80,19 +91,58 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
+
       - name: Restore node modules from cache
         uses: actions/cache@v3
         with:
           path: node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
+
       - name: Restore application node modules from cache
         uses: actions/cache@v3
         with:
           path: ./Example/node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
+
       - name: Build example application
         run: |
-          cd ./Example
-          ls
-          cd ./android
+          cd ./Example/android
           ./gradlew assembleDebug
+
+  build-ios:
+    runs-on: macos-latest
+    needs: setup
+    timeout-minutes: 5
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Restore node modules from cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Restore application node modules from cache
+        uses: actions/cache@v3
+        with:
+          path: ./Example/node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+        
+      - name: Install pod dependencies
+        run: |
+          cd ./Example/ios && pod install
+  
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_13.2.1.app
+        
+      - name: Xcode Version
+        run: /usr/bin/xcodebuild -version
+        
+      - name: Create build folder
+        run: mkdir -p build
+        
+      - name: Build Debug version
+        run: |
+          cd ./Example/ios
+          xcodebuild -workspace Example.xcworkspace -scheme Example -configuration Debug -sdk iphonesimulator
