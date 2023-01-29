@@ -123,7 +123,7 @@ jobs:
   build-ios:
     runs-on: macos-latest
     needs: setup
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
