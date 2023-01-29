@@ -35,7 +35,7 @@ jobs:
         id: cache-app-node-modules
         with:
           working-directory: ./Example
-          path: node_modules
+          path: ./Example/node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install node modules if cache not present
         run: yarn install --immutable
