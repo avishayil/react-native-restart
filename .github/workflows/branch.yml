@@ -79,6 +79,8 @@ jobs:
     needs: setup
     timeout-minutes: 5
     steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
       - name: Restore node modules from cache
         uses: actions/cache@v3
         with:
@@ -88,5 +90,5 @@ jobs:
       - name: Build example application
         run: |
           ls
-          cd ./android
+          cd ./Example/android
           ./gradlew assembleDebug
