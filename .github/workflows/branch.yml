@@ -41,6 +41,13 @@ jobs:
         with:
           path: ./Example/node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Cache application pods
+        uses: actions/cache@v3
+        id: cache-app-pods
+        with:
+          path: ./Example/ios/Pods
+          key: pods-${{ hashFiles('Example/ios/Podfile.lock') }}
       
       - name: Install node modules if cache not present
         run: yarn install --immutable
@@ -49,6 +56,10 @@ jobs:
       - name: Install application node modules if cache not present
         run: cd ./Example && yarn install --immutable
         if: steps.cache-example-application-node-modules.outputs.cache-hit != 'true'
+
+      - name: Install application pods if cache not present
+        run: cd ./Example/ios && pod install
+        if: steps.cache-application-pods.outputs.cache-hit != 'true'
 
   lint:
     runs-on: ubuntu-latest
@@ -128,19 +139,18 @@ jobs:
         with:
           path: ./Example/node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
-        
-      - name: Install pod dependencies
-        run: |
-          cd ./Example/ios && pod install
+
+      - name: Restore application pods from cache
+        uses: actions/cache@v3
+        with:
+          path: ./Example/ios/Pods
+          key: pods-${{ hashFiles('Example/ios/Podfile.lock') }}
   
       - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode_13.2.1.app
         
       - name: Xcode Version
         run: /usr/bin/xcodebuild -version
-        
-      - name: Create build folder
-        run: mkdir -p build
         
       - name: Build Debug version
         run: |
