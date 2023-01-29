@@ -9,7 +9,7 @@ on:
 jobs:
   setup:
     name: Setup code and environment needed for building, linting and tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 5
     steps:
       - name: Check out Git repository
