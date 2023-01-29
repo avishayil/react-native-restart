@@ -86,6 +86,8 @@ jobs:
           path: node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Build example application
+        with:
+          working-directory: ./Example
         run: |
           cd ./android
           ./gradlew assembleDebug
