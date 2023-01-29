@@ -84,11 +84,17 @@ jobs:
       - name: Restore node modules from cache
         uses: actions/cache@v3
         with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Restore application node modules from cache
+        uses: actions/cache@v3
+        with:
           working-directory: ./Example
           path: node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Build example application
         run: |
+          cd ./Example
           ls
-          cd ./Example/android
+          cd ./android
           ./gradlew assembleDebug
