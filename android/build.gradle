@@ -21,6 +21,8 @@ def safeExtGet(name) {
 }
 
 android {
+  namespace 'com.reactnativerestart'
+
   compileSdkVersion safeExtGet('compileSdkVersion')
 
   defaultConfig {

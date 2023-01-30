@@ -15,6 +15,7 @@ import {
   Text,
   useColorScheme,
   View,
+  TouchableOpacity
 } from 'react-native';
 
 import {
@@ -24,6 +25,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import RNRestart from '../src/index';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -76,6 +79,13 @@ function App(): JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+          <Section title="Step Zero">
+            <TouchableOpacity onPress={() => RNRestart.Restart()}>
+              <View style={styles.restartButton}>
+                <Text>Restart</Text>
+              </View>
+            </TouchableOpacity>
+          </Section>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.
@@ -112,6 +122,13 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  restartButton: {
+    backgroundColor: '#7d7d7d',
+    paddingHorizontal: 50,
+    paddingVertical: 20,
+    marginTop: 10,
+    borderRadius: 10,
   },
 });
 
