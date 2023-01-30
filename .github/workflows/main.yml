@@ -123,6 +123,7 @@ jobs:
 
       - name: Build example application
         run: |
+          export JAVA_HOME=${{ steps.java-home.outputs.JAVA_HOME }}
           cd ./Example/android
           ./gradlew assembleDebug
 
