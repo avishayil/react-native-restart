@@ -23,6 +23,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: "11"
+          distribution: "adopt"
           cache: "gradle"
 
       # Workaround for https://github.com/actions/setup-java/issues/65
