@@ -1,0 +1,157 @@
+name: Main tests
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  setup:
+    name: Setup code and environment needed for building, linting and tests
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+      
+      - name: Set up Node environment
+        uses: actions/setup-node@v2
+      
+      - name: Cache Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+          distribution: "adopt"
+          cache: "gradle"
+      
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      
+      - name: Cache module node modules
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      
+      - name: Cache Example application node modules
+        uses: actions/cache@v3
+        id: cache-app-node-modules
+        with:
+          path: ./Example/node_modules
+          key: yarn-${{ hashFiles('Example/yarn.lock') }}
+
+      - name: Cache application pods
+        uses: actions/cache@v3
+        id: cache-app-pods
+        with:
+          path: ./Example/ios/Pods
+          key: pods-${{ hashFiles('Example/ios/Podfile.lock') }}
+      
+      - name: Install node modules if cache not present
+        run: yarn install --immutable
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      
+      - name: Install application node modules if cache not present
+        run: cd ./Example && yarn install --immutable
+        if: steps.cache-app-node-modules.outputs.cache-hit != 'true'
+
+      - name: Install application pods if cache not present
+        run: cd ./Example/ios && pod install --no-repo-update
+        if: steps.cache-app-pods.outputs.cache-hit != 'true'
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: setup
+    timeout-minutes: 5
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Restore node modules from cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Lint
+        run: yarn lint
+
+  test:
+    runs-on: macos-latest
+    needs: setup
+    timeout-minutes: 5
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Restore node modules from cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Run tests
+        run: yarn test
+
+  build-android:
+    runs-on: macos-latest
+    needs: setup
+    timeout-minutes: 10
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Restore node modules from cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Restore application node modules from cache
+        uses: actions/cache@v3
+        with:
+          path: ./Example/node_modules
+          key: yarn-${{ hashFiles('Example/yarn.lock') }}
+
+      - name: Build example application
+        run: |
+          cd ./Example/android
+          ./gradlew assembleDebug
+
+  build-ios:
+    runs-on: macos-latest
+    needs: setup
+    timeout-minutes: 60
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Restore node modules from cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Restore application node modules from cache
+        uses: actions/cache@v3
+        with:
+          path: ./Example/node_modules
+          key: yarn-${{ hashFiles('Example/yarn.lock') }}
+
+      - name: Restore application pods from cache
+        uses: actions/cache@v3
+        with:
+          path: ./Example/ios/Pods
+          key: pods-${{ hashFiles('Example/ios/Podfile.lock') }}
+  
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_13.2.1.app
+        
+      - name: Xcode Version
+        run: /usr/bin/xcodebuild -version
+        
+      - name: Build Debug version
+        run: |
+          cd ./Example/ios
+          xcodebuild -workspace Example.xcworkspace -scheme Example -configuration Debug -sdk iphonesimulator
