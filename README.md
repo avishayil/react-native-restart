@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
-[![Build Status](https://travis-ci.org/avishayil/react-native-restart.svg?branch=master)](https://travis-ci.org/avishayil/react-native-restart)
+[![Build status](https://github.com/avishayil/react-native-restart/actions/workflows/main.yml/badge.svg)](https://github.com/avishayil/react-native-restart/actions/workflows/main.yml)
 
 Sometimes you want to reload your app bundle during app runtime. This package will allow you to do it.
 
@@ -13,7 +13,8 @@ iOS GIF             | Android GIF
 ## Installation
 
 - Using `react-native < 0.62`? install `react-native-restart@0.0.17`
-- Using `react-native >= 0.62`? install `react-native-restart@0.0.20` and above
+- Using `0.71 > react-native >= 0.62`? install `react-native-restart@0.0.24`
+- Using `react-native >= 0.71`? install `react-native-restart@0.0.25` and above
 
 ### With `yarn`
 

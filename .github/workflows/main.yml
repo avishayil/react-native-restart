@@ -6,6 +6,29 @@ on:
       - '**'
 
 jobs:
+
+  changes:
+    runs-on: ubuntu-latest
+    # Required permissions
+    permissions:
+      pull-requests: read
+    # Set job outputs to values from filter step
+    outputs:
+      backend: ${{ steps.filter.outputs.android }}
+      frontend: ${{ steps.filter.outputs.ios }}
+    steps:
+    # For pull requests it's not necessary to checkout the code
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            android:
+              - 'android/**'
+              - 'Example/android/**'
+            ios:
+              - 'ios/**'
+              - 'Example/ios/**'
+
   setup:
     name: Setup code and environment needed for building, linting and tests
     runs-on: macos-latest
@@ -13,7 +36,7 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
-      
+
       - name: Set up Node environment
         uses: actions/setup-node@v3
         with:
@@ -103,7 +126,8 @@ jobs:
 
   build-android:
     runs-on: macos-latest
-    needs: setup
+    needs: [setup, changes]
+    if: ${{ needs.changes.outputs.android == 'true' }}
     timeout-minutes: 10
     steps:
       - name: Check out Git repository
@@ -129,7 +153,8 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
-    needs: setup
+    needs: [setup, changes]
+    if: ${{ needs.changes.outputs.ios == 'true' }}
     timeout-minutes: 60
     steps:
       - name: Check out Git repository
