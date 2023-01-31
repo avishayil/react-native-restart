@@ -24,7 +24,8 @@
     "pods": "cd Example/ios && node -e \"process.exit(require('os').platform() === 'darwin')\" || pod install",
     "bootstrap": "yarn example && yarn && yarn pods && cp .env.example .env",
     "clean": "rm -rf node_modules coverage .env lib Example/node_modules Example/ios/Pods",
-    "windows": "react-native run-windows"
+    "windows": "react-native run-windows",
+    "prepack": "bob build"
   },
   "keywords": [
     "react-native",
@@ -55,8 +56,8 @@
     "prettier": "2.4.1",
     "react": "18.2.0",
     "react-native": "0.71.1",
+    "react-native-builder-bob": "^0.20.3",
     "react-native-windows": "0.71.0",
-    "react-native-builder-bob": "0.20.3",
     "release-it": "15.6.0",
     "typescript": "4.8.4"
   },
@@ -122,5 +123,18 @@
     "files": [
       "src/"
     ]
-  }
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ]
 }
