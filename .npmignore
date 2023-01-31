@@ -1,6 +1,6 @@
 __tests__/
 _mocks_/
-.commitling.config.js
+.commitlint.config.js
 
 # Android/IOS Build Artifacts
 build/
