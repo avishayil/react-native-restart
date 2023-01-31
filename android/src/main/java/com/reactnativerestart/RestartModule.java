@@ -99,6 +99,11 @@ public class RestartModule extends ReactContextBaseJavaModule {
       ProcessPhoenix.triggerRebirth(getReactApplicationContext());
     }
 
+    @ReactMethod
+    public void restart() {
+      ProcessPhoenix.triggerRebirth(getReactApplicationContext());
+    }
+
     @Override
     public String getName() {
         return "RNRestart";

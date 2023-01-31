@@ -20,4 +20,15 @@ RCT_EXPORT_METHOD(Restart) {
     return;
 }
 
+RCT_EXPORT_METHOD(restart) {
+    if ([NSThread isMainThread]) {
+        [self loadBundle];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self loadBundle];
+        });
+    }
+    return;
+}
+
 @end

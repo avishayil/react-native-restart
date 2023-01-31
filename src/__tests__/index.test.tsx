@@ -5,6 +5,6 @@ import RNRestart from "react-native-restart";
 
 describe("test RNRestart API functions", () => {
     it("calls the restart function", () => {
-        RNRestart.Restart();
+        RNRestart.restart();
     });
 });

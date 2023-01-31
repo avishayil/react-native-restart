@@ -23,11 +23,11 @@ jobs:
         with:
           filters: |
             android:
-              - 'android/**'
-              - 'Example/android/**'
+              - 'android/*/**'
+              - 'Example/android/*/**'
             ios:
-              - 'ios/**'
-              - 'Example/ios/**'
+              - 'ios/*/**'
+              - 'Example/ios/*/**'
 
   setup:
     name: Setup code and environment needed for building, linting and tests

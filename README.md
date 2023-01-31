@@ -143,7 +143,8 @@ Remember to run `cd ios && pod install` to update files used by Xcode.
 import RNRestart from 'react-native-restart'; // Import package from node modules
 
 // Immediately reload the React Native Bundle
-RNRestart.Restart();
+RNRestart.Restart(); // Deprecated
+RNRestart.restart();
 ```
 
 ## Contributing

@@ -80,7 +80,7 @@ function App(): JSX.Element {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Step Zero">
-            <TouchableOpacity onPress={() => RNRestart.Restart()}>
+            <TouchableOpacity onPress={() => RNRestart.restart()}>
               <View style={styles.restartButton}>
                 <Text>Restart</Text>
               </View>
