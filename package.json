@@ -112,7 +112,7 @@
       }
     }
   },
-  "@react-native-community/bob": {
+  "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
     "targets": [
@@ -122,15 +122,6 @@
     ],
     "files": [
       "src/"
-    ]
-  },
-  "react-native-builder-bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      "commonjs",
-      "module",
-      "typescript"
     ]
   },
   "eslintIgnore": [
