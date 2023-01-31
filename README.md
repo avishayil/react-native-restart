@@ -14,7 +14,7 @@ iOS GIF             | Android GIF
 
 - Using `react-native < 0.62`? install `react-native-restart@0.0.17`
 - Using `0.71 > react-native >= 0.62`? install `react-native-restart@0.0.24`
-- Using `react-native >= 0.71`? install `react-native-restart@0.0.26` and above
+- Using `react-native >= 0.71`? install `react-native-restart@0.0.27` and above
 
 ### With `yarn`
 

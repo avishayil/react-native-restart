@@ -1,7 +1,7 @@
 {
   "git": {
-    "commitMessage": "chore: release %s",
-    "tagName": "v%s",
+    "commitMessage": "chore: release 0.0.27",
+    "tagName": "v0.0.27",
     "requireBranch": "master"
   },
   "npm": {

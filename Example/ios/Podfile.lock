@@ -297,7 +297,7 @@ PODS:
   - React-jsinspector (0.71.1)
   - React-logger (0.71.1):
     - glog
-  - react-native-restart (0.0.26):
+  - react-native-restart (0.0.27):
     - React-Core
   - React-perflogger (0.71.1)
   - React-RCTActionSheet (0.71.1):
