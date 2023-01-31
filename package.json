@@ -42,7 +42,7 @@
     "@commitlint/config-conventional": "^8.3.4",
     "@react-native-community/bob": "^0.10.1",
     "@react-native-community/eslint-config": "^0.0.7",
-    "@release-it/conventional-changelog": "^1.1.0",
+    "@release-it/conventional-changelog": "^5.1.1",
     "@types/jest": "^25.1.2",
     "@types/react": "^17.0.1",
     "@types/react-native": "^0.64.1",
@@ -58,7 +58,7 @@
     "react": "17.0.1",
     "react-native": "^0.64.1",
     "react-native-windows": "^0.64.1",
-    "release-it": "^12.6.3",
+    "release-it": "^15.6.0",
     "typescript": "^3.7.5"
   },
   "peerDependencies": {
