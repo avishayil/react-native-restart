@@ -61,3 +61,6 @@ lib/
 
 # Coverage
 coverage/
+
+# testing
+/coverage
