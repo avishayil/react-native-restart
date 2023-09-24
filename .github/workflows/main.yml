@@ -65,7 +65,7 @@ jobs:
         if: steps.cache-app-node-modules.outputs.cache-hit != 'true'
 
       - name: Install application pods if cache not present
-        run: cd ./Example/ios && pod install --no-repo-update
+        run: cd ./Example/ios && pod repo update && pod install
         if: steps.cache-app-pods.outputs.cache-hit != 'true'
 
   lint:
