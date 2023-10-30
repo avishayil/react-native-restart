@@ -1,6 +1,6 @@
 import { NativeModules } from "react-native";
 
-const { RNRestart } = NativeModules;
+const { RNRestart: rnRestart } = NativeModules;
 
 type RestartType = {
   /**
@@ -8,6 +8,20 @@ type RestartType = {
    */
   Restart(): void;
   restart(): void;
+  getReason(): Promise<string>;
 };
 
-export default RNRestart as RestartType;
+const Restart = (reason?: string) => {
+    if (!reason) {
+        rnRestart.Restart(null);
+    } else {
+        rnRestart.Restart(reason);
+    }
+};
+const RNRestart: RestartType = {
+    ...rnRestart,
+    restart: Restart,
+    Restart,
+};
+
+export default RNRestart;

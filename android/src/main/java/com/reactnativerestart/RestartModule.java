@@ -10,11 +10,14 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.jakewharton.processphoenix.ProcessPhoenix;
+import com.facebook.react.bridge.Promise;
+
 
 public class RestartModule extends ReactContextBaseJavaModule {
 
     private static final String REACT_APPLICATION_CLASS_NAME = "com.facebook.react.ReactApplication";
     private static final String REACT_NATIVE_HOST_CLASS_NAME = "com.facebook.react.ReactNativeHost";
+    private static String restartReason = null;
 
     private LifecycleEventListener mLifecycleEventListener = null;
 
@@ -95,14 +98,26 @@ public class RestartModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void Restart() {
-      ProcessPhoenix.triggerRebirth(getReactApplicationContext());
+    public void Restart(String reason) {
+        restartReason = reason;
+        loadBundle();
     }
 
     @ReactMethod
-    public void restart() {
-      ProcessPhoenix.triggerRebirth(getReactApplicationContext());
+    public void restart(String reason) {
+        restartReason = reason;
+        loadBundle();
     }
+    
+    @ReactMethod
+    public void getReason(Promise promise) {
+        try {
+            promise.resolve(restartReason);
+        } catch(Exception e) {
+            promise.reject("Create Event Error", e);
+        }
+    }
+    
 
     @Override
     public String getName() {
