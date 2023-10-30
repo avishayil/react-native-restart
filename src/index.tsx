@@ -6,8 +6,8 @@ type RestartType = {
   /**
    * @deprecated use `restart` instead
    */
-  Restart(): void;
-  restart(): void;
+  Restart(reason?: string): void;
+  restart(reason?: string): void;
   getReason(): Promise<string>;
 };
 
