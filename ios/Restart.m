@@ -34,4 +34,10 @@ RCT_EXPORT_METHOD(restart: (NSString *)reason) {
     return;
 }
 
+RCT_REMAP_METHOD(getReason, resolver: (RCTPromiseResolveBlock)resolve
+     rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve(restartReason); 
+}
+
 @end
