@@ -1,6 +1,6 @@
 {
-  "name": "react-native-restart",
-  "version": "0.0.28",
+  "name": "@galaxyfinx/react-native-restart",
+  "version": "0.0.29",
   "description": "Sometimes you want to reload your app bundle during app runtime. This package will allow you to do it.",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -32,7 +32,10 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/avishayil/react-native-restart",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": "https://github.com/GalaxyFinX/react-native-restart.git",
   "author": "Avishay Bar <avishay.il@gmail.com> (https://github.com/avishayil)",
   "license": "MIT",
   "bugs": {
