@@ -1,9 +1,9 @@
 name: Main tests
 
 on:
-  push:
-    branches:
-      - '**'
+    push:
+      branches:
+        - master
 
 jobs:
 
@@ -86,7 +86,7 @@ jobs:
         run: yarn lint
 
   test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     needs: setup
     timeout-minutes: 5
     steps:
@@ -103,7 +103,7 @@ jobs:
         run: yarn test
 
   build-android:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     needs: [setup]
     timeout-minutes: 10
     steps:
@@ -153,9 +153,6 @@ jobs:
         with:
           path: ./Example/ios/Pods
           key: pods-${{ hashFiles('Example/ios/Podfile.lock') }}
-  
-      - name: Select Xcode
-        run: sudo xcode-select -switch /Applications/Xcode_13.2.1.app
         
       - name: Xcode Version
         run: /usr/bin/xcodebuild -version

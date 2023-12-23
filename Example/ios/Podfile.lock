@@ -375,7 +375,7 @@ PODS:
   - React-jsinspector (0.72.4)
   - React-logger (0.72.4):
     - glog
-  - react-native-restart (0.0.27):
+  - react-native-restart (0.0.28):
     - React-Core
   - React-NativeModulesApple (0.72.4):
     - hermes-engine
@@ -692,7 +692,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: c7f826e40fa9cab5d37cab6130b1af237332b594
   React-jsinspector: aaed4cf551c4a1c98092436518c2d267b13a673f
   React-logger: da1ebe05ae06eb6db4b162202faeafac4b435e77
-  react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
+  react-native-restart: 4494134396cf409d59756275240717c5512197aa
   React-NativeModulesApple: edb5ace14f73f4969df6e7b1f3e41bef0012740f
   React-perflogger: 496a1a3dc6737f964107cb3ddae7f9e265ddda58
   React-RCTActionSheet: 02904b932b50e680f4e26e7a686b33ebf7ef3c00
@@ -716,4 +716,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c0a554845235370ca817f4812ef52dbc3a36d89b
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.14.2

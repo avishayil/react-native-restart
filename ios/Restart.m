@@ -3,13 +3,15 @@
 @implementation Restart
 
 RCT_EXPORT_MODULE(RNRestart)
+NSString  *restartReason = nil;
 
 - (void)loadBundle
 {
     RCTTriggerReloadCommandListeners(@"react-native-restart: Restart");
 }
 
-RCT_EXPORT_METHOD(Restart) {
+RCT_EXPORT_METHOD(Restart: (NSString *)reason) {
+    restartReason = reason;
     if ([NSThread isMainThread]) {
         [self loadBundle];
     } else {
@@ -20,7 +22,8 @@ RCT_EXPORT_METHOD(Restart) {
     return;
 }
 
-RCT_EXPORT_METHOD(restart) {
+RCT_EXPORT_METHOD(restart: (NSString *)reason) {
+    restartReason = reason;
     if ([NSThread isMainThread]) {
         [self loadBundle];
     } else {
