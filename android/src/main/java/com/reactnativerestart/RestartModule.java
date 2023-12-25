@@ -100,13 +100,13 @@ public class RestartModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void Restart(String reason) {
         restartReason = reason;
-        loadBundle();
+        ProcessPhoenix.triggerRebirth(getReactApplicationContext());
     }
 
     @ReactMethod
     public void restart(String reason) {
         restartReason = reason;
-        loadBundle();
+        ProcessPhoenix.triggerRebirth(getReactApplicationContext());
     }
     
     @ReactMethod
