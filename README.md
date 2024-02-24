@@ -1,9 +1,10 @@
-<img src="./images/standwithisrael.png" title="Israel" width="780">
-
 **On October 7th, 2023 Hamas terrorists launched a unilateral attack on Israel, brutally killing thousands of civilians, including infants and children, taking 240 hostages, and injuring thousands more.**
 
 **MORE THAN 110 HOSTAGES REMAIN IN CAPTIVITY. BRING THEM HOME NOW!**
 **[#BringThemHomeNow](https://stories.bringthemhomenow.net/)**
+
+**Since 1948 Israel occupied Palestine and made the lives of millions of Palestinians hill! Today, there are thousands of innocent Palestinians held hostage in Israeli prisons!*
+**[Gaza is the largest open-air prison on the planet!](https://www.hrw.org/news/2022/06/14/gaza-israels-open-air-prison-15)**
 
 # React Native Restart
 
