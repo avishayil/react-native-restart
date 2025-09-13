@@ -1,10 +1,3 @@
-<img src="./images/standwithisrael.png" title="Israel" width="780">
-
-**On October 7th, 2023 Hamas terrorists launched a unilateral attack on Israel, brutally killing thousands of civilians, including infants and children, taking 240 hostages, and injuring thousands more.**
-
-**MORE THAN 110 HOSTAGES REMAIN IN CAPTIVITY. BRING THEM HOME NOW!**
-**[#BringThemHomeNow](https://stories.bringthemhomenow.net/)**
-
 # React Native Restart
 
 [![npm version](https://img.shields.io/npm/v/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
