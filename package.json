@@ -10,7 +10,11 @@
     "src",
     "lib",
     "android",
+    "!android/build/",
+    "!android/.gradle/",
     "ios",
+    "!ios/Restart.xcodeproj/",
+    "!ios/Restart.xcworkspace/",
     "react-native-restart.podspec",
     "windows"
   ],
