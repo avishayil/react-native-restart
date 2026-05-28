@@ -1,0 +1,214 @@
+name: Publish to NPM
+
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:
+      - 'v*'  # Push events to tags matching v*, e.g., v1.0.0, v0.0.28
+  workflow_dispatch:
+    inputs:
+      npm_tag:
+        description: 'NPM tag (latest, next, beta, etc.)'
+        required: false
+        default: 'latest'
+
+jobs:
+  publish:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write  # Required for NPM provenance
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Get package version
+        id: package_version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Check if version matches tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          PACKAGE_VERSION=${{ steps.package_version.outputs.version }}
+
+          if [ "$TAG_VERSION" != "$PACKAGE_VERSION" ]; then
+            echo "❌ Error: Tag version ($TAG_VERSION) does not match package.json version ($PACKAGE_VERSION)"
+            exit 1
+          fi
+
+          echo "✅ Version check passed: $PACKAGE_VERSION"
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build package
+        run: npm run prepack
+
+      - name: Check package contents
+        run: |
+          echo "📦 Package contents:"
+          npm pack --dry-run
+
+          echo ""
+          echo "📋 Files that will be published:"
+          npm publish --dry-run 2>&1 | grep -A 100 "npm notice" || true
+
+      - name: Determine NPM tag
+        id: npm_tag
+        run: |
+          VERSION=${{ steps.package_version.outputs.version }}
+
+          # Check if version contains pre-release identifier
+          if [[ $VERSION =~ -([a-z]+) ]]; then
+            # Extract pre-release tag (beta, alpha, rc, etc)
+            TAG="${BASH_REMATCH[1]}"
+            echo "tag=$TAG" >> $GITHUB_OUTPUT
+            echo "📦 Pre-release detected: will publish with tag '$TAG'"
+          else
+            # Stable release
+            echo "tag=latest" >> $GITHUB_OUTPUT
+            echo "📦 Stable release detected: will publish with tag 'latest'"
+          fi
+
+      - name: Publish to NPM (tag push)
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
+
+      - name: Publish to NPM (manual)
+        if: github.event_name == 'workflow_dispatch'
+        run: npm publish --provenance --access public --tag ${{ github.event.inputs.npm_tag }}
+
+      - name: Create GitHub deployment
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = '${{ steps.package_version.outputs.version }}';
+            const npmUrl = `https://www.npmjs.com/package/react-native-restart/v/${version}`;
+
+            github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.ref,
+              environment: 'npm',
+              description: `Published v${version} to NPM`,
+              auto_merge: false,
+              required_contexts: []
+            });
+
+      - name: Create release summary
+        if: success() && startsWith(github.ref, 'refs/tags/v')
+        run: |
+          VERSION=${{ steps.package_version.outputs.version }}
+          NPM_URL="https://www.npmjs.com/package/react-native-restart/v/${VERSION}"
+
+          echo "### ✅ Successfully Published to NPM! 🎉" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${VERSION}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**NPM Tag:** \`${{ steps.npm_tag.outputs.tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📦 [View on NPM](${NPM_URL})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Installation:**" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "npm install react-native-restart@${VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "# or" >> $GITHUB_STEP_SUMMARY
+          echo "yarn add react-native-restart@${VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+  verify-publish:
+    name: Verify NPM Package
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: success()
+
+    steps:
+      - name: Wait for NPM propagation
+        run: sleep 30
+
+      - name: Get package version
+        id: package_version
+        run: |
+          VERSION=$(curl -s https://registry.npmjs.org/react-native-restart/latest | jq -r '.version')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Verify package is installable
+        run: |
+          mkdir -p /tmp/test-install
+          cd /tmp/test-install
+          npm init -y
+          npm install react-native-restart@${{ steps.package_version.outputs.version }}
+
+          # Check if package installed correctly
+          if [ -d "node_modules/react-native-restart" ]; then
+            echo "✅ Package installed successfully"
+
+            # Check if main files exist
+            if [ -f "node_modules/react-native-restart/package.json" ]; then
+              echo "✅ package.json exists"
+            fi
+
+            if [ -d "node_modules/react-native-restart/lib" ]; then
+              echo "✅ lib directory exists"
+            fi
+
+            if [ -f "node_modules/react-native-restart/lib/commonjs/index.js" ]; then
+              echo "✅ commonjs build exists"
+            fi
+
+            if [ -f "node_modules/react-native-restart/lib/module/index.js" ]; then
+              echo "✅ module build exists"
+            fi
+
+            echo ""
+            echo "📦 Installed package info:"
+            npm list react-native-restart
+          else
+            echo "❌ Package installation failed"
+            exit 1
+          fi
+
+      - name: Verification summary
+        if: always()
+        run: |
+          STATUS="${{ job.status }}"
+          VERSION="${{ steps.package_version.outputs.version }}"
+
+          if [ "$STATUS" = "success" ]; then
+            echo "### ✅ Package Verification Passed!" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "The package \`react-native-restart@${VERSION}\` is installable from NPM." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ❌ Package Verification Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "The package may not be installable yet. Check the logs for details." >> $GITHUB_STEP_SUMMARY
+          fi
