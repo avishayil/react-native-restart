@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-      classpath("com.android.tools.build:gradle:7.3.1")
+      classpath("com.android.tools.build:gradle:8.12.0")
     }
   }
 }
@@ -23,11 +23,11 @@ def safeExtGet(name) {
 android {
   namespace 'com.reactnativerestart'
 
-  compileSdkVersion safeExtGet('compileSdkVersion')
+  compileSdkVersion safeExtGet('compileSdkVersion') ?: 36
 
   defaultConfig {
-    minSdkVersion safeExtGet('minSdkVersion')
-    targetSdkVersion safeExtGet('targetSdkVersion')
+    minSdkVersion safeExtGet('minSdkVersion') ?: 24
+    targetSdkVersion safeExtGet('targetSdkVersion') ?: 36
     versionCode 1
     versionName "1.0"
   }
@@ -40,8 +40,8 @@ android {
     disable 'GradleCompatible'
   }
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_11
-    targetCompatibility JavaVersion.VERSION_11
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
   }
 }
 

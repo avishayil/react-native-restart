@@ -1,13 +1,11 @@
 package com.reactnativerestart;
 
 import com.facebook.react.ReactPackage;
-import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class RestartPackage implements ReactPackage {
@@ -18,11 +16,6 @@ public class RestartPackage implements ReactPackage {
 
         modules.add(new RestartModule(reactContext));
         return modules;
-    }
-    
-    // Deprecated RN 0.47
-    public List<Class<? extends JavaScriptModule>> createJSModules() {
-        return Collections.emptyList();
     }
 
     @Override
