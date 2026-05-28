@@ -21,7 +21,21 @@ iOS GIF             | Android GIF
 
 - Using `react-native < 0.62`? install `react-native-restart@0.0.17`
 - Using `0.71 > react-native >= 0.62`? install `react-native-restart@0.0.24`
-- Using `react-native >= 0.71`? install `react-native-restart@0.0.27` and above
+- Using `0.72 - 0.84`? install `react-native-restart@0.0.28`
+- Using `react-native >= 0.85`? install `react-native-restart@0.0.28` and above
+
+## Requirements
+
+For React Native 0.85.3+:
+- React Native 0.85.3+
+- React 19.2.3+
+- Node.js 20.19.4+ (or 22.13.0+, 24.3.0+, 25.0.0+)
+- iOS 15.1+
+- Xcode 16.1+
+- Android API 24+ (Android 7.0+)
+- Android SDK 36
+- Java 17 (for Android development)
+- Gradle 9.3.1
 
 ### With `yarn`
 

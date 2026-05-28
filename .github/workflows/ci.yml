@@ -13,59 +13,58 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-      
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
+
       - name: Cache Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          java-version: "11"
-          distribution: "adopt"
+          java-version: "17"
+          distribution: "temurin"
           cache: "gradle"
 
       # Workaround for https://github.com/actions/setup-java/issues/65
       - name: Backup JAVA_HOME
         id: java-home
-        run: echo "::set-output name=path::$JAVA_HOME"
-      
+        run: echo "path=$JAVA_HOME" >> $GITHUB_OUTPUT
+
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v3
       
       - name: Cache module node modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: cache-node-modules
         with:
           path: node_modules
-          key: yarn-${{ hashFiles('yarn.lock') }}
-      
+          key: npm-${{ hashFiles('package-lock.json') }}
+
       - name: Cache Example application node modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: cache-app-node-modules
         with:
           path: ./Example/node_modules
-          key: yarn-${{ hashFiles('Example/yarn.lock') }}
+          key: npm-${{ hashFiles('Example/package-lock.json') }}
 
       - name: Cache application pods
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: cache-app-pods
         with:
           path: ./Example/ios/Pods
           key: pods-${{ hashFiles('Example/ios/Podfile.lock') }}
-      
-      - name: Install node modules if cache not present
-        run: yarn install --immutable
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-      
-      - name: Install application node modules if cache not present
-        run: cd ./Example && yarn install --immutable
-        if: steps.cache-app-node-modules.outputs.cache-hit != 'true'
+
+      - name: Install node modules
+        run: npm ci
+
+      - name: Install application node modules
+        run: cd ./Example && npm ci
 
       - name: Install application pods if cache not present
-        run: cd ./Example/ios && pod repo update && pod install
+        run: cd ./Example/ios && pod install
         if: steps.cache-app-pods.outputs.cache-hit != 'true'
 
   lint:
@@ -74,16 +73,25 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Restore node modules from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          key: npm-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies if cache miss
+        run: npm ci
 
       - name: Lint
-        run: yarn lint
+        run: npm run lint
 
   test:
     runs-on: ubuntu-latest
@@ -91,16 +99,25 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Restore node modules from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          key: npm-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies if cache miss
+        run: npm ci
 
       - name: Run tests
-        run: yarn test
+        run: npm test
 
   build-android:
     runs-on: ubuntu-latest
@@ -108,23 +125,41 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: "gradle"
 
       - name: Restore node modules from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          key: npm-${{ hashFiles('package-lock.json') }}
 
       - name: Restore application node modules from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./Example/node_modules
-          key: yarn-${{ hashFiles('Example/yarn.lock') }}
+          key: npm-${{ hashFiles('Example/package-lock.json') }}
+
+      - name: Install dependencies if cache miss
+        run: npm ci
+
+      - name: Install application dependencies if cache miss
+        run: cd ./Example && npm ci
 
       - name: Build example application
         run: |
-          export JAVA_HOME=${{ steps.java-home.outputs.JAVA_HOME }}
           cd ./Example/android
           ./gradlew assembleDebug
 
@@ -134,30 +169,45 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Restore node modules from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          key: npm-${{ hashFiles('package-lock.json') }}
 
       - name: Restore application node modules from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./Example/node_modules
-          key: yarn-${{ hashFiles('Example/yarn.lock') }}
+          key: npm-${{ hashFiles('Example/package-lock.json') }}
 
       - name: Restore application pods from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./Example/ios/Pods
           key: pods-${{ hashFiles('Example/ios/Podfile.lock') }}
-        
+
+      - name: Install dependencies if cache miss
+        run: npm ci
+
+      - name: Install application dependencies if cache miss
+        run: cd ./Example && npm ci
+
+      - name: Install application pods if cache miss
+        run: cd ./Example/ios && pod install
+
       - name: Xcode Version
         run: /usr/bin/xcodebuild -version
-        
+
       - name: Build Debug version
         run: |
           cd ./Example/ios
-          xcodebuild -workspace Example.xcworkspace -scheme Example -configuration Debug -sdk iphonesimulator
+          xcodebuild -workspace HelloWorld.xcworkspace -scheme HelloWorld -configuration Debug -sdk iphonesimulator

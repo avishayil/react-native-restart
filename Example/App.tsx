@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -15,91 +14,74 @@ import {
   Text,
   useColorScheme,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-import RNRestart from '../src/index';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import RNRestart from 'react-native-restart';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const backgroundColor = isDarkMode ? '#1a1a1a' : '#f5f5f5';
+  const textColor = isDarkMode ? '#ffffff' : '#000000';
+  const cardBackground = isDarkMode ? '#2d2d2d' : '#ffffff';
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={[styles.container, {backgroundColor}]}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+        backgroundColor={backgroundColor}
       />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step Zero">
-            <TouchableOpacity onPress={() => RNRestart.restart()}>
-              <View style={styles.restartButton}>
-                <Text>Restart</Text>
-              </View>
-            </TouchableOpacity>
-          </Section>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+        style={styles.scrollView}>
+        <View style={styles.header}>
+          <Text style={[styles.title, {color: textColor}]}>
+            React Native Restart
+          </Text>
+          <Text style={[styles.subtitle, {color: textColor}]}>
+            Example App
+          </Text>
+        </View>
+
+        <View style={[styles.card, {backgroundColor: cardBackground}]}>
+          <Text style={[styles.sectionTitle, {color: textColor}]}>
+            Test Restart Functionality
+          </Text>
+          <Text style={[styles.description, {color: textColor}]}>
+            Press the button below to restart the React Native application.
+            This will reload the JavaScript bundle and reinitialize the app.
+          </Text>
+
+          <TouchableOpacity
+            style={styles.restartButton}
+            onPress={() => RNRestart.restart()}>
+            <Text style={styles.buttonText}>↻ Restart App</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.card, {backgroundColor: cardBackground}]}>
+          <Text style={[styles.sectionTitle, {color: textColor}]}>
+            Platform Info
+          </Text>
+          <Text style={[styles.infoText, {color: textColor}]}>
+            OS: {Platform.OS}
+          </Text>
+          <Text style={[styles.infoText, {color: textColor}]}>
+            Version: {Platform.Version}
+          </Text>
+        </View>
+
+        <View style={[styles.card, {backgroundColor: cardBackground}]}>
+          <Text style={[styles.sectionTitle, {color: textColor}]}>
+            About
+          </Text>
+          <Text style={[styles.description, {color: textColor}]}>
+            This example app demonstrates the react-native-restart library
+            which allows you to programmatically restart your React Native
+            application.
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -107,28 +89,65 @@ function App(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  header: {
+    paddingVertical: 40,
     paddingHorizontal: 24,
+    alignItems: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
-  sectionDescription: {
-    marginTop: 8,
+  subtitle: {
     fontSize: 18,
     fontWeight: '400',
+    opacity: 0.7,
   },
-  highlight: {
-    fontWeight: '700',
+  card: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    padding: 20,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  description: {
+    fontSize: 16,
+    lineHeight: 24,
+    opacity: 0.8,
+  },
+  infoText: {
+    fontSize: 16,
+    lineHeight: 24,
+    marginVertical: 4,
   },
   restartButton: {
-    backgroundColor: '#7d7d7d',
-    paddingHorizontal: 50,
-    paddingVertical: 20,
-    marginTop: 10,
-    borderRadius: 10,
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+    marginTop: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 

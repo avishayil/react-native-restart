@@ -1,50 +1,22 @@
-/**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const path = require('path');
-const fs = require('fs');
-const exclusionList = require('metro-config/src/defaults/exclusionList');
-const escape = require('escape-string-regexp');
 
-const root = path.resolve(__dirname, '..');
-const pak = JSON.parse(
-  fs.readFileSync(path.join(root, 'package.json'), 'utf8')
-);
-
-const modules = [
-  '@babel/runtime',
-  ...Object.keys({
-    ...pak.dependencies,
-    ...pak.peerDependencies,
-  }),
-];
-
-module.exports = {
-
-  projectRoot: __dirname,
-  watchFolders: [root],
-
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ *
+ * @type {import('@react-native/metro-config').MetroConfig}
+ */
+const config = {
+  watchFolders: [
+    path.resolve(__dirname, '..'),
+  ],
   resolver: {
-    blacklistRE: exclusionList([
-      new RegExp(`^${escape(path.join(root, 'node_modules'))}\\/.*$`),
-    ]),
-
-    extraNodeModules: modules.reduce((acc, name) => {
-      acc[name] = path.join(__dirname, 'node_modules', name);
-      return acc;
-    }, {}),
-  },
-
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
+    nodeModulesPaths: [
+      path.resolve(__dirname, 'node_modules'),
+      path.resolve(__dirname, '..', 'node_modules'),
+    ],
   },
 };
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
