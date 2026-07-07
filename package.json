@@ -70,13 +70,19 @@
     "react": "19.2.3",
     "react-native": "0.85.3",
     "react-native-builder-bob": "^0.20.3",
-    "react-native-windows": "0.84.0-preview.11",
+    "react-native-windows": "0.84.0",
     "release-it": "15.6.0",
     "typescript": "5.5.4"
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-windows": "*"
+  },
+  "peerDependenciesMeta": {
+    "react-native-windows": {
+      "optional": true
+    }
   },
   "jest": {
     "preset": "@react-native/jest-preset",
@@ -124,5 +130,22 @@
   "eslintIgnore": [
     "node_modules/",
     "lib/"
-  ]
+  ],
+  "codegenConfig": {
+    "name": "RNRestartSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "windows": {
+      "namespace": "ReactNativeRestartCodegen",
+      "outputDirectory": "windows/ReactNativeRestart/codegen",
+      "separateDataTypes": true
+    }
+  },
+  "react-native-windows": {
+    "init-windows": {
+      "name": "ReactNativeRestart",
+      "namespace": "ReactNativeRestart",
+      "template": "cpp-lib"
+    }
+  }
 }
