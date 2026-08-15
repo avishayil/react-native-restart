@@ -161,6 +161,12 @@ RNRestart.Restart(); // Deprecated
 RNRestart.restart();
 ```
 
+## Architecture
+
+This library is a thin JS bridge (`src/index.tsx`) over three native implementations of an `RNRestart` module — iOS (`ios/`), Android (`android/`), and Windows (`windows/`). Any public-API change must be made across the JS layer and all native platforms together.
+
+For a full overview of the structure, commands, build/publish flow, and conventions — aimed at both contributors and AI agents — see [CLAUDE.md](CLAUDE.md).
+
 ## Contributing
 
 Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) if you like to contribute to this library.
