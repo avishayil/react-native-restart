@@ -16,6 +16,16 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
+// New Architecture: generate this library's codegen (native specs + JNI/CMake) from the
+// `codegenConfig` in package.json and the TurboModule spec in src/NativeRNRestart.ts.
+// Without this, a New-Architecture app's autolinking cannot find the library's
+// `android/build/generated/source/codegen/jni/` directory or the `react_codegen_RNRestartSpec`
+// target, and the app's CMake configure step fails. The plugin is provided by the consuming
+// app's React Native Gradle Plugin (composite build), so no extra classpath is needed here.
+if (project != rootProject) {
+  apply plugin: 'com.facebook.react'
+}
+
 def safeExtGet(name) {
   rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties[name]
 }
