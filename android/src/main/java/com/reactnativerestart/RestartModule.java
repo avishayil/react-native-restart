@@ -2,13 +2,18 @@ package com.reactnativerestart;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.facebook.fbreact.specs.NativeRNRestartSpec;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
-public class RestartModule extends ReactContextBaseJavaModule {
+/**
+ * New-Architecture-aware implementation. Extends the codegen-generated
+ * {@link NativeRNRestartSpec} (which itself extends ReactContextBaseJavaModule), so the same
+ * module works on both the legacy and the New Architecture. The module name ("RNRestart") and
+ * getName() come from the generated spec.
+ */
+public class RestartModule extends NativeRNRestartSpec {
 
     private static final String PREFERENCES_NAME = "react-native-restart";
     private static final String RESTART_REASON_KEY = "restartReason";
@@ -55,23 +60,18 @@ public class RestartModule extends ReactContextBaseJavaModule {
         ProcessPhoenix.triggerRebirth(getReactApplicationContext());
     }
 
-    @ReactMethod
+    @Override
     public void Restart(String reason) {
         restartApp(reason);
     }
 
-    @ReactMethod
+    @Override
     public void restart(String reason) {
         restartApp(reason);
     }
 
-    @ReactMethod
+    @Override
     public void getReason(Promise promise) {
         promise.resolve(restartReason);
-    }
-
-    @Override
-    public String getName() {
-        return "RNRestart";
     }
 }
