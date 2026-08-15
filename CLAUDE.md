@@ -77,6 +77,55 @@ Run from the repo root (yarn is the project's package manager; `npm run <script>
 | `bob build` (`yarn prepare` / `prepack`) | Compile `src/` → `lib/` (commonjs, module, typescript). |
 
 Run `yarn typescript && yarn lint && yarn test` before committing — the same checks CI runs.
+(`yarn` and `npm run` are interchangeable here; the checks above only need Node + `npm ci`.)
+
+## Local environment setup (macOS)
+
+The JS checks only need Node. To run the **full native build matrix** (what CI's
+`build-android` / `build-ios` jobs do) you also need Java, the Android SDK, Xcode,
+and CocoaPods. One-time setup with Homebrew:
+
+```bash
+# JS/native tooling
+brew install openjdk@17 cocoapods watchman
+brew install --cask android-commandlinetools    # SDK root: /opt/homebrew/share/android-commandlinetools
+
+# Persist the toolchain env (also appended to ~/.zshrc by setup)
+export JAVA_HOME="/opt/homebrew/opt/openjdk@17"
+export ANDROID_HOME="/opt/homebrew/share/android-commandlinetools"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export PATH="$JAVA_HOME/bin:$ANDROID_HOME/platform-tools:$PATH"
+
+# Accept licenses + install the SDK packages the RN 0.85 build needs
+yes | sdkmanager --licenses
+sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0" "cmake;3.22.1"
+# NDK 27.1.x is pulled in automatically by the Android Gradle Plugin on first build.
+```
+
+- **iOS** additionally needs **Xcode** (from the App Store) — it cannot be installed via Homebrew.
+- **Windows** (`windows/`) can only be built on Windows with Visual Studio + the RNW
+  toolchain; there is no way to build it on macOS/Linux.
+
+### Running the full builds
+
+```bash
+# JS (root)
+npm ci && npm run typescript && npm run lint && npm test
+
+# Android (New Architecture is enabled in the Example app)
+cd Example && npm ci
+cd android && echo "sdk.dir=$ANDROID_HOME" > local.properties
+./gradlew assembleDebug            # first run downloads Gradle 9.3.1 + RN artifacts (~15 min)
+
+# iOS
+cd Example/ios && pod install
+xcodebuild -workspace HelloWorld.xcworkspace -scheme HelloWorld \
+  -configuration Debug -sdk iphonesimulator
+```
+
+> **`Example/node_modules/react-native-restart` is a symlink to the repo root.** Native
+> builds therefore compile the library source of whatever branch is currently checked
+> out — do **not** switch branches while a build is running, or you'll compile a mix.
 
 ## Build & publish
 
