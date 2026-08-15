@@ -12,6 +12,9 @@ on:
         required: false
         default: 'latest'
 
+permissions:
+  contents: read
+
 jobs:
   publish:
     name: Publish to NPM
