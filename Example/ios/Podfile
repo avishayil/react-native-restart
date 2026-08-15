@@ -23,6 +23,10 @@ target 'HelloWorld' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  target 'HelloWorldTests' do
+    inherit! :search_paths
+  end
+
   post_install do |installer|
     react_native_post_install(
       installer,

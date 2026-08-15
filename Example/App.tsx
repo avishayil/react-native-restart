@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -26,6 +26,15 @@ function App(): JSX.Element {
   const backgroundColor = isDarkMode ? '#1a1a1a' : '#f5f5f5';
   const textColor = isDarkMode ? '#ffffff' : '#000000';
   const cardBackground = isDarkMode ? '#2d2d2d' : '#ffffff';
+
+  // After a restart, surface the reason that was passed to it (persisted natively).
+  const [reason, setReason] = useState<string | null>(null);
+
+  useEffect(() => {
+    RNRestart.getReason()
+      .then(setReason)
+      .catch(() => setReason(null));
+  }, []);
 
   return (
     <SafeAreaView style={[styles.container, {backgroundColor}]}>
@@ -55,10 +64,18 @@ function App(): JSX.Element {
           </Text>
 
           <TouchableOpacity
+            testID="restart-button"
+            accessibilityLabel="Restart App"
             style={styles.restartButton}
-            onPress={() => RNRestart.restart()}>
+            onPress={() => RNRestart.restart('maestro-e2e')}>
             <Text style={styles.buttonText}>↻ Restart App</Text>
           </TouchableOpacity>
+
+          <Text
+            testID="restart-reason"
+            style={[styles.infoText, {color: textColor}]}>
+            Last restart reason: {reason ?? 'none'}
+          </Text>
         </View>
 
         <View style={[styles.card, {backgroundColor: cardBackground}]}>
