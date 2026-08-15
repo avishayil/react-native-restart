@@ -169,6 +169,16 @@ public-API change must be made across the JS layer and every native platform tog
 full overview of structure, commands, build/publish flow, and conventions — for contributors
 and AI agents — see [CLAUDE.md](CLAUDE.md).
 
+## Testing
+
+The library is tested across JS, native iOS, native Android, and end-to-end (Maestro), with
+each layer exercising the full restart/refresh flow. See [TESTING.md](TESTING.md) for exactly
+what runs where and how to run it.
+
+## Security
+
+Please report vulnerabilities privately — see [SECURITY.md](SECURITY.md).
+
 ## Contributing
 
 Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
