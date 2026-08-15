@@ -181,6 +181,26 @@ and the JavaScript runtime are reinitialized. On iOS, it reloads the React
 Native bundle. The optional restart reason survives the Android process restart
 and is returned by `getReason()` after the application starts again.
 
+### White screen during restart
+
+Because `restart()` tears down the view hierarchy and remounts the app, there is a
+brief gap before the new instance renders — on iOS this can look like a white flash.
+To avoid the flash, set your root view's background color natively in `AppDelegate`:
+
+```objc
+- (UIView *)createRootViewWithBridge:(RCTBridge *)bridge
+                          moduleName:(NSString *)moduleName
+                           initProps:(NSDictionary *)initProps {
+  UIView *rootView = [super createRootViewWithBridge:bridge moduleName:moduleName initProps:initProps];
+  rootView.backgroundColor = [UIColor blackColor]; // your app's background color
+  return rootView;
+}
+```
+
+Showing a full splash screen for the duration of the restart requires additional
+app-side native code (a native launch screen shown on app launch). See
+[#238](https://github.com/avishayil/react-native-restart/issues/238).
+
 ## Architecture
 
 This library is a thin JS bridge (`src/index.tsx`) over three native implementations of an `RNRestart` module — iOS (`ios/`), Android (`android/`), and Windows (`windows/`). Any public-API change must be made across the JS layer and all native platforms together.
