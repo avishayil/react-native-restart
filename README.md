@@ -1,191 +1,151 @@
-# React Native Restart
+<div align="center">
+
+# 🔄 React Native Restart
+
+**Programmatically reload the JavaScript bundle / restart your React Native app at runtime.**
 
 [![npm version](https://img.shields.io/npm/v/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-restart.svg?style=flat-square)](https://www.npmjs.com/package/react-native-restart)
-[![Build status](https://github.com/avishayil/react-native-restart/actions/workflows/main.yml/badge.svg)](https://github.com/avishayil/react-native-restart/actions/workflows/main.yml)
+[![Build status](https://github.com/avishayil/react-native-restart/actions/workflows/ci.yml/badge.svg)](https://github.com/avishayil/react-native-restart/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/npm/l/react-native-restart.svg?style=flat-square)](./LICENSE)
 
-Sometimes you want to reload your app bundle during app runtime. This package will allow you to do it.
+![platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20Android%20%7C%20Windows-blue?style=flat-square)
+![New Architecture](https://img.shields.io/badge/New%20Architecture-supported-success?style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-typed-3178c6?style=flat-square)
 
-iOS GIF             | Android GIF
-:-------------------------:|:-------------------------:
-<img src="./images/ios.gif" title="iOS GIF" width="250"> | <img src="./images/android.gif" title="Android GIF" width="250">
+</div>
+
+<table>
+  <tr>
+    <th align="center">iOS</th>
+    <th align="center">Android</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="./images/ios.gif" title="iOS demo" width="250"></td>
+    <td align="center"><img src="./images/android.gif" title="Android demo" width="250"></td>
+  </tr>
+</table>
+
+Common use cases: applying an RTL/LTR locale change, recovering from a fatal JS state,
+resetting the app after login/logout, or clearing in-memory state without asking the user
+to kill and reopen the app.
+
+## Features
+
+- ✅ One call to restart — `RNRestart.restart()`
+- ✅ **iOS, Android & Windows** support
+- ✅ **New Architecture (TurboModule/Fabric) and legacy architecture** both supported
+- ✅ Optional restart **reason** you can read back after the restart (`getReason()`)
+- ✅ Fully typed (TypeScript) with a codegen TurboModule spec
+
+## Platform & architecture support
+
+| Platform | Restart mechanism | Old Arch | New Arch |
+| --- | --- | :---: | :---: |
+| iOS | Reloads the JS bundle (`RCTTriggerReloadCommandListeners`) | ✅ | ✅ |
+| Android | Full process restart (`ProcessPhoenix`) | ✅ | ✅ |
+| Windows | Reloads the instance (`ReactNativeHost.ReloadInstance`) | ✅ | ✅ |
+
+> On **Android** the whole process is restarted, so native state **and** the JS runtime are
+> reinitialized. On **iOS/Windows** the JS bundle is reloaded in-process. The optional restart
+> reason survives the restart and is returned by `getReason()` on the next launch.
 
 ## Installation
 
-- Using `react-native < 0.62`? install `react-native-restart@0.0.17`
-- Using `0.71 > react-native >= 0.62`? install `react-native-restart@0.0.24`
-- Using `0.72 - 0.84`? install `react-native-restart@0.0.28`
-- Using `react-native >= 0.85`? install `react-native-restart@0.0.28` and above
-
-## Requirements
-
-For React Native 0.85.3+:
-- React Native 0.85.3+
-- React 19.2.3+
-- Node.js 20.19.4+ (or 22.13.0+, 24.3.0+, 25.0.0+)
-- iOS 15.1+
-- Xcode 16.1+
-- Android API 24+ (Android 7.0+)
-- Android SDK 36
-- Java 17 (for Android development)
-- Gradle 9.3.1
-- Windows: `react-native-windows` 0.84.0+ (optional peer dependency, New Architecture)
-
-### With `yarn`
-
 ```bash
-$ yarn add react-native-restart
+npm install react-native-restart
+# or
+yarn add react-native-restart
 ```
 
-### With `npm`
-```bash
-$ npm install --save react-native-restart
-```
+Match the package version to your React Native version:
 
-## Auto-Linking Setup (react-native >= 0.60)
+| React Native | Install |
+| --- | --- |
+| `>= 0.85` | `react-native-restart@latest` |
+| `0.72 – 0.84` | `react-native-restart@0.0.28` |
+| `0.62 – 0.71` | `react-native-restart@0.0.24` |
+| `< 0.62` | `react-native-restart@0.0.17` |
 
-### iOS
+**Requirements (RN 0.85+):** React 19.2+, Node 20.19+ / 22.13+ / 24.3+, iOS 15.1+ &
+Xcode 16.1+, Android API 24+ (SDK 36, Java 17, Gradle 9.3+), and — for Windows —
+`react-native-windows` 0.84+ (optional peer dependency).
 
-```bash
-$ cd ios
-$ pod install
-```
+### Linking
 
-### Android
+Autolinking (React Native ≥ 0.60) handles everything:
 
-No further steps should be taken
+- **iOS:** `cd ios && pod install`
+- **Android:** no extra steps
+- **Windows:** `npx react-native autolink-windows` (runs automatically as part of `run-windows`)
 
-### Windows
+<details>
+<summary>Manual installation (legacy React Native, without autolinking)</summary>
 
-Requires `react-native-windows` 0.84.0 or higher. The module is picked up by autolinking:
+#### Android — `android/settings.gradle`
 
-```bash
-$ npx react-native autolink-windows
-```
-
-This also runs automatically as part of `npx react-native run-windows`.
-
-## Automatic Installation (Without Auto-Linking)
-
-`react-native link react-native-restart` or `npm install -g rnpm && rnpm link react-native-restart`
-
-## Manual Android Installation
-
-In `android/settings.gradle`
 ```gradle
-...
-
 include ':react-native-restart'
 project(':react-native-restart').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-restart/android')
 ```
 
-In `android/app/build.gradle`
+`android/app/build.gradle`:
 
 ```gradle
-...
-
 dependencies {
-    ...
-
     implementation project(':react-native-restart')
 }
 ```
 
-Register module (in `MainApplication.java`)
+Register the package in `MainApplication`:
 
 ```java
-import com.reactnativerestart.RestartPackage;  // <--- Import
+import com.reactnativerestart.RestartPackage; // <--- import
 
-public class MainApplication extends Application implements ReactApplication {
-
-	private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-  		......
-
-	      /**
-	     * A list of packages used by the app. If the app uses additional views
-	     * or modules besides the default ones, add more packages here.
-	     */
-	    @Override
-	    protected List<ReactPackage> getPackages() {
-	        ...
-	        return Arrays.<ReactPackage>asList(
-	                new MainReactPackage(),
-	                new RestartPackage() // Add this line
-	        );
-	    }
-	};
-	......
-};
-
+// ...in getPackages():
+new RestartPackage()
 ```
 
-## Manual iOS Installation
+#### iOS (manual / CocoaPods)
 
-### Importing The Library
-
- * Drag the file `Restart.xcodeproj` from `/node_modules/react-native-restart/ios` into the `Libraries` group in the Project navigator. Ensure that `Copy items if needed` is UNCHECKED!
-
-  ![Add Files To...](http://i.imgur.com/puxHiIg.png)
-
-  ![Library Imported Successfully](http://i.imgur.com/toZUWg5.png)
-
- * Ensure that `libRestart.a` is linked through `Link Binary With Libraries` on `Build Phases`:
-
-  ![Library Linked](http://i.imgur.com/Sm1birt.png)
-
- * Ensure that `Header Search Paths` on `Build Settings` has the path `$(SRCROOT)/../node_modules/react-native-restart` set to `recursive`:
-
- * You're All Set!
-
-## CocoaPod iOS Installation
-
-In your `ios/Podfile` make sure to use `react-native-restart` from the local
-`node_modules/`. With that, only your project Pod needs to be linked and
-no extra configuration is required:
+Add to your `ios/Podfile`:
 
 ```ruby
-target 'MyReactApp' do
-  # Make sure you're also using React-Native from ../node_modules
-  pod 'React', :path => '../node_modules/react-native', :subspecs => [
-    'Core',
-    'RCTActionSheet',
-	# ... whatever else you use
-  ]
-  # React-Native dependencies such as yoga:
-  pod 'yoga', path: '../node_modules/react-native/ReactCommon/yoga'
-
-  # The following line uses react-native-restart, linking with
-  # the library and setting the Header Search Paths for you
-  pod 'react-native-restart', :path => '../node_modules/react-native-restart'
-end
+pod 'react-native-restart', :path => '../node_modules/react-native-restart'
 ```
 
-Remember to run `cd ios && pod install` to update files used by Xcode.
+Then `cd ios && pod install`. (For very old projects you can instead drag
+`Restart.xcodeproj` from `node_modules/react-native-restart/ios` into your Xcode
+`Libraries` group and link `libRestart.a`.)
+
+</details>
 
 ## Usage
 
 ```javascript
-import RNRestart from 'react-native-restart'; // Import package from node modules
+import RNRestart from 'react-native-restart';
 
-// Restart the application
-RNRestart.Restart(); // Deprecated
+// Restart the app (reloads the JS bundle; full process restart on Android)
 RNRestart.restart();
 
-// Optionally make a reason available after the restart
+// Optionally attach a reason, then read it back after the restart
 RNRestart.restart('language-change');
-const reason = await RNRestart.getReason();
+const reason = await RNRestart.getReason(); // => 'language-change'
 ```
 
-On Android, `restart()` restarts the application process so both native state
-and the JavaScript runtime are reinitialized. On iOS, it reloads the React
-Native bundle. The optional restart reason survives the Android process restart
-and is returned by `getReason()` after the application starts again.
+### API
+
+| Method | Description |
+| --- | --- |
+| `restart(reason?: string): void` | Restart the app. Preferred entry point. |
+| `Restart(reason?: string): void` | **Deprecated** alias of `restart` (kept for backward compatibility). |
+| `getReason(): Promise<string \| null>` | The reason passed to the last restart, or `null`. Survives the restart. |
 
 ### White screen during restart
 
-Because `restart()` tears down the view hierarchy and remounts the app, there is a
-brief gap before the new instance renders — on iOS this can look like a white flash.
-To avoid the flash, set your root view's background color natively in `AppDelegate`:
+Because `restart()` tears down the view hierarchy and remounts the app, there is a brief gap
+before the new instance renders — on iOS this can look like a white flash. To avoid it, set
+your root view's background color natively in `AppDelegate`:
 
 ```objc
 - (UIView *)createRootViewWithBridge:(RCTBridge *)bridge
@@ -197,20 +157,27 @@ To avoid the flash, set your root view's background color natively in `AppDelega
 }
 ```
 
-Showing a full splash screen for the duration of the restart requires additional
-app-side native code (a native launch screen shown on app launch). See
+A full splash screen for the duration of the restart needs additional app-side native code
+(a native launch screen shown on app launch). See
 [#238](https://github.com/avishayil/react-native-restart/issues/238).
 
 ## Architecture
 
-This library is a thin JS bridge (`src/index.tsx`) over three native implementations of an `RNRestart` module — iOS (`ios/`), Android (`android/`), and Windows (`windows/`). Any public-API change must be made across the JS layer and all native platforms together.
-
-For a full overview of the structure, commands, build/publish flow, and conventions — aimed at both contributors and AI agents — see [CLAUDE.md](CLAUDE.md).
+A thin JS bridge (`src/index.tsx` + the TurboModule spec `src/NativeRNRestart.ts`) over native
+`RNRestart` modules on iOS (`ios/`), Android (`android/`), and Windows (`windows/`). Any
+public-API change must be made across the JS layer and every native platform together. For a
+full overview of structure, commands, build/publish flow, and conventions — for contributors
+and AI agents — see [CLAUDE.md](CLAUDE.md).
 
 ## Contributing
 
-Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) if you like to contribute to this library.
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Credits
 
-Thanks to Microsoft CodePush library. I simply extracted the code from their library's logic to reload the React Native Bundle.
+Thanks to the Microsoft CodePush library; the original bundle-reload logic was extracted from
+there.
+
+## License
+
+[MIT](./LICENSE)
