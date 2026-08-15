@@ -1,0 +1,21 @@
+# End-to-end restart verification for the Example app.
+#
+# Run with the platform's app id, e.g.:
+#   iOS:     maestro test -e APP_ID=org.reactjs.native.example.HelloWorld .maestro/restart.yaml
+#   Android: maestro test -e APP_ID=com.example .maestro/restart.yaml
+#
+# The flow taps "Restart App" (which calls RNRestart.restart('maestro-e2e')) and asserts the
+# app comes back and shows the reason returned by getReason() — proving the restart happened,
+# the app reloaded without crashing, and the reason survived the restart.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- assertVisible: "React Native Restart"
+- assertVisible:
+    id: "restart-reason"
+- tapOn:
+    id: "restart-button"
+- extendedWaitUntil:
+    visible: "Last restart reason: maestro-e2e"
+    timeout: 30000

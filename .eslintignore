@@ -1,3 +1,5 @@
 Example/
 lib/
 coverage/
+**/build/
+android/build/
