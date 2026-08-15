@@ -10,6 +10,8 @@ I am an individual working on this project, all the work is public and presented
 2. Run `yarn bootstrap` to setup the development environment.
 3. Do the changes you want and test them out in the example app before sending a pull request.
 
+> For an architecture overview and the "keep the JS bridge and all native platforms in sync" rule, see [CLAUDE.md](CLAUDE.md).
+
 ### Commit message convention
 
 We follow the [conventional commits specification](https://www.conventionalcommits.org/en) for commit messages:
