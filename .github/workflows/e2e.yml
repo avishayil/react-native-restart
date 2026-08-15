@@ -1,0 +1,85 @@
+name: E2E (Maestro)
+
+# End-to-end restart verification against a real simulator/emulator. This is expensive and
+# comparatively slow, so it runs on demand and on a weekly schedule rather than on every PR.
+# The per-PR restart behavior is covered by the native unit tests in ci.yml (iOS XCTest +
+# Android Robolectric), which exercise the full restart/getReason refresh scenario.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  ios:
+    name: iOS e2e (simulator)
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd Example && npm ci
+      - name: Install pods
+        run: cd Example/ios && pod install
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+      - name: Boot a simulator
+        id: sim
+        run: |
+          NAME=$(xcrun simctl list devices available | grep -oE 'iPhone [0-9]+( Pro)?' | head -1)
+          echo "Booting: $NAME"
+          xcrun simctl boot "$NAME" || true
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+      - name: Build & install the app (Release — embeds the JS bundle)
+        run: |
+          cd Example/ios
+          xcodebuild build \
+            -workspace HelloWorld.xcworkspace -scheme HelloWorld \
+            -configuration Release -sdk iphonesimulator \
+            -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.name }}" \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO
+          xcrun simctl install booted "build/Build/Products/Release-iphonesimulator/HelloWorld.app"
+      - name: Run Maestro flow
+        run: maestro test -e APP_ID=org.reactjs.native.example.HelloWorld .maestro/restart.yaml
+
+  android:
+    name: Android e2e (emulator)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd Example && npm ci
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+      - name: Build release APK (embeds the JS bundle)
+        run: cd Example/android && ./gradlew assembleRelease
+      - name: Run Maestro flow on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          profile: pixel_6
+          script: |
+            adb install -r Example/android/app/build/outputs/apk/release/app-release.apk
+            maestro test -e APP_ID=com.example .maestro/restart.yaml
