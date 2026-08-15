@@ -166,7 +166,7 @@ Match the installed package version to your React Native version (from `README.m
 | `< 0.62` | `0.0.17` |
 | `0.62` – `< 0.71` | `0.0.24` |
 | `0.72` – `0.84` | `0.0.28` |
-| `>= 0.85` | `0.0.28` and above |
+| `>= 0.85` | `0.0.29` and above |
 
 ## Gotchas when contributing
 
