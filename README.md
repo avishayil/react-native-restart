@@ -29,6 +29,7 @@ For React Native 0.85.3+:
 - Android SDK 36
 - Java 17 (for Android development)
 - Gradle 9.3.1
+- Windows: `react-native-windows` 0.84.0+ (optional peer dependency, New Architecture)
 
 ### With `yarn`
 
@@ -53,6 +54,16 @@ $ pod install
 ### Android
 
 No further steps should be taken
+
+### Windows
+
+Requires `react-native-windows` 0.84.0 or higher. The module is picked up by autolinking:
+
+```bash
+$ npx react-native autolink-windows
+```
+
+This also runs automatically as part of `npx react-native run-windows`.
 
 ## Automatic Installation (Without Auto-Linking)
 
@@ -156,10 +167,19 @@ Remember to run `cd ios && pod install` to update files used by Xcode.
 ```javascript
 import RNRestart from 'react-native-restart'; // Import package from node modules
 
-// Immediately reload the React Native Bundle
+// Restart the application
 RNRestart.Restart(); // Deprecated
 RNRestart.restart();
+
+// Optionally make a reason available after the restart
+RNRestart.restart('language-change');
+const reason = await RNRestart.getReason();
 ```
+
+On Android, `restart()` restarts the application process so both native state
+and the JavaScript runtime are reinitialized. On iOS, it reloads the React
+Native bundle. The optional restart reason survives the Android process restart
+and is returned by `getReason()` after the application starts again.
 
 ## Architecture
 

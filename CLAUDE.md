@@ -17,46 +17,55 @@ Public API (see `src/index.tsx`):
 
 | Method | Notes |
 | --- | --- |
-| `RNRestart.restart(reason?)` | Reload the JS bundle. Preferred entry point. |
+| `RNRestart.restart(reason?)` | Restart the app. Preferred entry point. Android does a full process restart; iOS/Windows reload the bundle. |
 | `RNRestart.Restart(reason?)` | **Deprecated** — kept for backward compatibility; identical behavior. |
-| `RNRestart.getReason()` | `Promise<string>` — returns the last reason passed to a restart. |
+| `RNRestart.getReason()` | `Promise<string \| null>` — returns the last reason passed to a restart (survives the Android process restart). |
 
 ## Architecture
 
 Four layers that must stay in sync:
 
 ```
-JS bridge        src/index.tsx        ← NativeModules.RNRestart, default export RNRestart
+JS bridge        src/index.tsx           ← NativeModules.RNRestart, default export RNRestart
+   │             src/NativeRNRestart.ts   ← TurboModule spec (drives New-Architecture codegen)
    │
-   ├─ iOS        ios/Restart.m|.h      ← RCTTriggerReloadCommandListeners (main thread)
+   ├─ iOS        ios/Restart.m|.h         ← RCTTriggerReloadCommandListeners (main thread)
    ├─ Android    android/src/main/java/com/reactnativerestart/
    │                 RestartModule.java       (ReactContextBaseJavaModule, name "RNRestart")
    │                 RestartPackage.java       (ReactPackage registration)
-   │                 ReactInstanceHolder.java  (optional instance-manager holder interface)
-   └─ Windows    windows/ReactNativeRestart/  (C++ / C++/WinRT)
+   │                 ReactInstanceHolder.java  (instance-manager holder interface)
+   └─ Windows    windows/ReactNativeRestart/  (C++/WinRT, New-Architecture TurboModule + codegen)
 ```
 
 - **iOS**: `Restart`/`restart` store the reason, hop to the main thread, and call
   `RCTTriggerReloadCommandListeners(...)` to reload the bundle.
-- **Android**: `RestartModule` calls `instanceManager.recreateReactContextInBackground()`,
-  falling back to `Activity.recreate()` (`loadBundleLegacy`) if that fails. Uses the
-  `com.jakewharton:process-phoenix` dependency (see `android/build.gradle`).
-- **Windows**: mirrors the same `RNRestart` module surface in C++.
+- **Android**: `RestartModule` does a **full process restart** via
+  `ProcessPhoenix.triggerRebirth(...)` (the `com.jakewharton:process-phoenix` dependency in
+  `android/build.gradle`). The reason is persisted to `SharedPreferences` (synchronous
+  `commit()`, since the process is killed immediately) and read back on next launch, so
+  `getReason()` still works across the restart.
+- **Windows**: New-Architecture TurboModule; the spec in `src/NativeRNRestart.ts` is
+  codegen'd into `windows/ReactNativeRestart/codegen/` (see `codegenConfig` in `package.json`).
 
-> **Key rule:** changing the public API means editing the JS type in `src/index.tsx`
-> **and every native platform in lockstep** (iOS, Android, Windows). The native module
-> name is `RNRestart` everywhere — don't rename it on one platform only.
+> **Key rule:** changing the public API means editing the JS type in `src/index.tsx`,
+> the TurboModule spec in `src/NativeRNRestart.ts`, **and every native platform in
+> lockstep** (iOS, Android, Windows). The native module name is `RNRestart` everywhere —
+> don't rename it on one platform only.
+>
+> Note the platforms differ by design: Android performs a full **process** restart, while
+> iOS/Windows reload the **bundle**.
 
 ## Repository map
 
 | Path | What it is |
 | --- | --- |
-| `src/index.tsx` | The entire JS/TS surface. `RestartType` + default export. |
+| `src/index.tsx` | The JS/TS surface. `RestartType` + default export. |
+| `src/NativeRNRestart.ts` | TurboModule spec consumed by RN codegen (New Architecture). |
 | `src/__tests__/index.test.tsx` | Jest unit test for the JS API. |
 | `src/__mocks__/react-native-restart.tsx` | Jest manual mock consumers use in their tests. |
 | `ios/` | iOS native module (`Restart.m`, `Restart.h`) + Xcode project. |
 | `android/` | Android library module (`build.gradle`, Java sources under `src/main/java/...`). |
-| `windows/` | Windows (RNW) native module. |
+| `windows/` | Windows (RNW) New-Architecture module, incl. generated `codegen/`. |
 | `Example/` | Standalone RN app that consumes the library; has its own package.json/tests. |
 | `react-native-restart.podspec` | CocoaPods spec (reads version from `package.json`). |
 | `badges/` | Auto-generated coverage badges (`yarn test` output — do not hand-edit). |
@@ -132,6 +141,9 @@ xcodebuild -workspace HelloWorld.xcworkspace -scheme HelloWorld \
 - **Build**: `react-native-builder-bob` compiles `src/` → `lib/` in three targets:
   `commonjs`, `module`, `typescript`. `package.json` `main`/`module`/`types` point into
   `lib/`, while the `react-native` field points at `src/index.tsx` (Metro reads source).
+- **Codegen (New Architecture)**: `package.json` → `codegenConfig` (`name: RNRestartSpec`,
+  `jsSrcsDir: src`) tells RN codegen to generate native specs from `src/NativeRNRestart.ts`.
+  `react-native-windows` is an optional peer dependency.
 - **Packaged files**: controlled by the `files` allowlist in `package.json` (`src`, `lib`,
   `android`, `ios`, `windows`, podspec — with build/workspace subdirs excluded).
 - **Publish**: automated via `.github/workflows/publish.yml` using npm trusted publishing
