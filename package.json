@@ -16,7 +16,8 @@
     "!ios/Restart.xcodeproj/",
     "!ios/Restart.xcworkspace/",
     "react-native-restart.podspec",
-    "windows"
+    "windows",
+    "Package.swift"
   ],
   "scripts": {
     "test": "jest --coverage && jest-coverage-badges --output './badges'",
@@ -147,5 +148,8 @@
       "namespace": "ReactNativeRestart",
       "template": "cpp-lib"
     }
+  },
+  "swiftpmConfig": {
+    "name": "RNRestart"
   }
 }
